@@ -2,12 +2,12 @@
    1. Design Tokens (Volcengine / Arco Design)
    ========================================= */
    :root {
-    /* æ ¸å¿ƒå“ç‰Œè‰²ï¼šè“ç´«æ¸å˜ */
+    /* Core brand colors */
     --primary-6: #1664FF;
     --primary-gradient: linear-gradient(135deg, #1664FF 0%, #722ED1 100%);
     --primary-light: #E8F3FF;
 
-    /* è¾…åŠ©è‰² */
+    /* Support colors */
     --success-6: #00B42A;
     --success-bg: #E8FFEA;
     --warning-6: #FF7D00;
@@ -15,7 +15,7 @@
     --error-6: #F53F3F;
     --error-bg: #FFECE8;
     
-    /* ç°åº¦ç³»ç»Ÿ */
+    /* Gray scale */
     --gray-title: #1D2129;
     --gray-text: #4E5969;
     --gray-sub: #86909C;
@@ -33,7 +33,7 @@
    ========================================= */
 html, body {
     width: 100%;
-    overflow-x: hidden; /* å¼ºåˆ¶ç¦æ­¢æ¨ªå‘æ»šåŠ¨ */
+    overflow-x: hidden;
     margin: 0;
     padding: 0;
 }
@@ -46,7 +46,7 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* å…¨å±€é¡¶éƒ¨å¯¼èˆªæ  */
+/* Global top navigation bar */
 .global-navbar {
     width: 100%;
     height: 60px;
@@ -82,7 +82,7 @@ body {
 .user-avatar { width: 24px; height: 24px; background: #E8F3FF; color: #1664FF; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
 .user-name { font-size: 12px; opacity: 0.9; white-space: nowrap; }
 
-/* å†…å®¹å®¹å™¨ */
+/* Content container */
 .layout-container {
     max-width: 1440px;
     margin: 0 auto;
@@ -111,7 +111,7 @@ body {
 .text-warning { color: var(--warning-6); }
 .text-error { color: var(--error-6); }
 
-/* è“è‰²å®žå¿ƒæŒ‰é’® */
+/* Blue solid button */
 .arco-btn.blue-btn {
     background: var(--primary-6); color: #fff; border: none;
 }
@@ -134,7 +134,7 @@ body {
 .hero-overview-card {
     background: var(--white);
     border-radius: var(--radius);
-    padding: 24px 32px; /* èˆ’é€‚çš„å†…è¾¹è· */
+    padding: 24px 32px;
     box-shadow: var(--shadow-s);
     border: 1px solid rgba(255, 255, 255, 0.6);
     display: flex;
@@ -142,7 +142,7 @@ body {
     margin-bottom: 0;
 }
 
-/* --- Upper Part: Header --- */
+/* Upper Part: Header */
 .hero-header-row {
     display: flex;
     justify-content: space-between;
@@ -187,7 +187,7 @@ body {
     color: var(--gray-sub);
 }
 
-/* --- Divider --- */
+/* Divider */
 .hero-divider {
     height: 1px;
     background: #E5E6EB;
@@ -196,7 +196,7 @@ body {
     opacity: 0.6;
 }
 
-/* --- Lower Part: Metrics --- */
+/* Lower Part: Metrics */
 .hero-metrics-row {
     display: flex;
     align-items: center;
@@ -260,7 +260,7 @@ body {
 /* Module 3: Actions */
 .actions-block { display: flex; gap: 12px; }
 
-/* 次要按钮样式（灰色边框） */
+/* Secondary button style */
 .arco-btn.btn-secondary {
     background: transparent;
     border: 1px solid var(--gray-border);
@@ -273,7 +273,7 @@ body {
     background: var(--primary-light);
 }
 
-/* 项目时间轴信息 */
+/* Project timeline info */
 .timeline-info {
     margin-top: 8px;
     font-size: 13px;
@@ -287,9 +287,9 @@ body {
 }
 
 /* =========================================
-   5. Alert Banner (Row 2)
+   5. Alert Banner (Row 1 - Top Priority)
    ========================================= */
-.alert-row { margin-top: 16px; }
+.alert-row { margin-bottom: 16px; }
 .arco-alert {
     background: #FFF0F0; border: 1px solid #FFDCDC;
     padding: 12px 20px; border-radius: 8px;
@@ -344,12 +344,11 @@ body {
 }
 
 /* =========================================
-   6. Lifecycle Section (Row 3)
+   6. Lifecycle Section (Row 3) - Merged stages + milestones
    ========================================= */
 .lifecycle-section {
     position: relative;
     padding-top: 20px; padding-bottom: 20px;
-    /* ç™½è‰²èƒŒæ™¯ï¼Œåœ†è§’ï¼Œé˜´å½±ï¼Œæ— è¾¹æ¡† */
     background: var(--white);
     border-radius: var(--radius);
     box-shadow: var(--shadow-s);
@@ -362,7 +361,7 @@ body {
     gap: 16px;
 }
 
-/* Tab切换器 */
+/* Tab switcher */
 .view-switcher {
     display: flex;
     gap: 8px;
@@ -399,14 +398,24 @@ body {
     box-shadow: 0 2px 4px rgba(0,0,0,0.08);
 }
 
-/* 视图容器 */
+/* View container */
 .view-container {
-    display: none;
+    display: none !important;
 }
 
 .view-container.active {
-    display: block;
+    display: block !important;
 }
+
+/* Unified spacing for view content */
+.view-container .lifecycle-steps {
+    padding: 10px 40px;
+}
+
+.view-container .milestone-timeline {
+    padding: 10px 24px 24px;
+}
+
 .card-title {
     font-size: 16px; font-weight: 700; color: var(--gray-title);
     position: relative; display: flex; align-items: center; gap: 8px; white-space: nowrap;
@@ -421,10 +430,10 @@ body {
     white-space: nowrap; flex-shrink: 0; margin-left: auto;
 }
 
-/* è¿›åº¦è½´ */
+/* Progress axis */
 .lifecycle-steps {
     display: flex; justify-content: space-between; position: relative;
-    padding: 10px 40px; margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 .step-node { flex: 1; text-align: center; position: relative; cursor: pointer; }
 .step-node::after {
@@ -434,7 +443,7 @@ body {
 .step-node:last-child::after { display: none; }
 .step-node.completed::after { background: #00B42A; } 
 
-/* èŠ‚ç‚¹å›¾æ ‡ */
+/* Node icon */
 .step-icon-wrapper {
     width: 36px; height: 36px; border-radius: 50%; background: var(--white);
     border: 3px solid var(--gray-border); margin: 0 auto 12px; position: relative; z-index: 1;
@@ -456,10 +465,9 @@ body {
 .step-title { font-size: 14px; font-weight: 600; color: var(--gray-title); margin-bottom: 4px; }
 .step-date { font-size: 12px; color: var(--gray-sub); font-family: 'Inter'; }
 
-/* è¯¦æƒ…é¢æ¿ */
+/* Detail panel */
 .stage-detail-panel {
     background: #FAFAFA; border-radius: 8px; padding: 24px;
-    /* ä¸Šä¸‹24pxï¼Œå·¦å³40pxé—´è· */
     margin: 24px 40px; 
     position: relative; border: 1px solid var(--gray-border);
     animation: slideDown 0.3s ease-out;
@@ -510,32 +518,25 @@ body {
 .task-row.pending .task-icon, .task-row.pending .task-status { color: var(--gray-sub); }
 
 /* =========================================
-    position: relative;
-    padding: 20px 24px 24px;
-    background: var(--white);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-s);
-    border: none;
-    margin-top: 20px;
-}
-
+   7. Milestone Timeline Styles
+   ========================================= */
 .milestone-timeline {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    padding: 10px 0;
+    min-height: 200px;
 }
 
 .milestone-item {
     display: grid;
-    grid-template-columns: 180px 1fr 120px 80px;
-    gap: 16px;
+    grid-template-columns: 200px 1fr 100px 100px;
+    gap: 20px;
     align-items: center;
-    padding: 16px 20px;
+    padding: 20px 24px;
     background: #FAFAFA;
-    border-radius: 6px;
+    border-radius: 8px;
     border: 1px solid var(--gray-border);
-    transition: all 0.2s;
+    transition: all 0.3s;
     position: relative;
 }
 
@@ -662,7 +663,7 @@ body {
 }
 .card-header.small .card-title { font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* é“¾æŽ¥å›¾æ ‡ï¼šæ–¹å½¢å›¾æ ‡æŒ‰é’® */
+/* Link icon */
 .link-icon {
     width: 28px; height: 28px; border-radius: 4px; background: var(--gray-bg);
     display: flex; align-items: center; justify-content: center;
@@ -689,7 +690,7 @@ body {
 .issue-divider { width: 1px; height: 50px; background: var(--gray-border); }
 
 /* =========================================
-   8. Animations
+   9. Animations
    ========================================= */
 @keyframes pulse-blue {
     0% { box-shadow: 0 0 0 0 rgba(22, 100, 255, 0.4); }
@@ -697,7 +698,7 @@ body {
     100% { box-shadow: 0 0 0 0 rgba(22, 100, 255, 0); }
 }
 
-/* åº”ç”¨åŠ¨ç”»åˆ°å½“å‰è¿›è¡Œçš„èŠ‚ç‚¹å›¾æ ‡ */
+/* Apply animation to current node */
 .step-node.current-process .step-icon-wrapper {
     background: #1664FF;
     color: #fff;
@@ -709,7 +710,7 @@ body {
 }
 
 /* =========================================
-   9. Responsive
+   10. Responsive
    ========================================= */
 @media (max-width: 1200px) {
     .hero-metrics-row { flex-wrap: wrap; }
@@ -723,6 +724,17 @@ body {
     .detail-container { grid-template-columns: 1fr; }
     .detail-right { border-left: none; border-top: 1px solid var(--gray-border); padding-left: 0; padding-top: 20px; }
     .dashboard-grid { grid-template-columns: repeat(2, 1fr); }
+    
+    /* Milestone responsive */
+    .milestone-item {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .milestone-dates {
+        flex-direction: column;
+        gap: 8px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -732,4 +744,10 @@ body {
     .step-node::after { width: 3px; height: 100%; left: 50%; top: 36px; }
     .step-node:last-child::after { display: none; }
     .dashboard-grid { grid-template-columns: 1fr; }
+    
+    /* Mobile tab switcher */
+    .view-switcher {
+        width: 100%;
+        justify-content: center;
+    }
 }

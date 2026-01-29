@@ -204,16 +204,30 @@ function closeDetailPanel() {
 // 关键里程碑模块（新增）
 // ----------------------------------------------------
 function renderMilestones(data) {
+    const container = document.getElementById('milestoneTimeline');
+    
+    if (!container) {
+        console.error('里程碑容器未找到！');
+        return;
+    }
+    
     if (!data.milestones || data.milestones.length === 0) {
-        document.getElementById('milestoneTimeline').innerHTML = 
-            '<div style="text-align:center; color:#999; padding:40px;">暂无里程碑数据</div>';
+        container.innerHTML = `
+            <div style="text-align:center; padding:60px 20px; color:#86909C;">
+                <i class="fas fa-flag-checkered" style="font-size:48px; color:#E5E6EB; margin-bottom:16px;"></i>
+                <div style="font-size:14px; font-weight:500; margin-bottom:8px;">暂无里程碑数据</div>
+                <div style="font-size:12px; color:#C9CDD4;">项目里程碑节点尚未设置</div>
+            </div>
+        `;
+        console.warn('没有里程碑数据');
         return;
     }
 
-    const container = document.getElementById('milestoneTimeline');
+    console.log('开始渲染', data.milestones.length, '个里程碑');
+    
     let html = '';
 
-    data.milestones.forEach(milestone => {
+    data.milestones.forEach((milestone, index) => {
         let statusClass = 'pending';
         let statusLabel = '未开始';
         let iconClass = 'fa-circle';
@@ -224,7 +238,7 @@ function renderMilestones(data) {
             statusLabel = '已完成';
             iconClass = 'fa-check-circle';
             if (milestone.delay_days > 0) {
-                delayHtml = `<span style="color:${milestone.delay_days > 0 ? '#FF7D00' : '#00B42A'}; font-size:12px;">延期${milestone.delay_days}天</span>`;
+                delayHtml = `<span style="color:#FF7D00; font-size:12px; font-weight:600;">延期${milestone.delay_days}天</span>`;
             }
         } else if (milestone.status === 'delay') {
             statusClass = 'delay';
@@ -268,7 +282,7 @@ function renderMilestones(data) {
                     ${statusLabel}
                 </div>
                 
-                <div style="min-width: 80px; text-align: right;">
+                <div style="min-width: 100px; text-align: right;">
                     ${delayHtml}
                 </div>
             </div>
@@ -276,6 +290,7 @@ function renderMilestones(data) {
     });
 
     container.innerHTML = html;
+    console.log('里程碑渲染完成，HTML长度:', html.length);
 }
 
 // ----------------------------------------------------
@@ -413,19 +428,42 @@ function renderBottomCharts(data) {
 // Tab切换功能
 // ----------------------------------------------------
 function switchView(viewName) {
+    console.log('切换到视图:', viewName);
+    
     // 切换Tab状态
     document.querySelectorAll('.view-tab').forEach(tab => {
         tab.classList.remove('active');
     });
-    document.querySelector(`.view-tab[data-view="${viewName}"]`).classList.add('active');
+    const activeTab = document.querySelector(`.view-tab[data-view="${viewName}"]`);
+    if (activeTab) {
+        activeTab.classList.add('active');
+    }
     
     // 切换视图容器
-    document.getElementById('stagesView').classList.remove('active');
-    document.getElementById('milestonesView').classList.remove('active');
+    const stagesView = document.getElementById('stagesView');
+    const milestonesView = document.getElementById('milestonesView');
+    
+    stagesView.classList.remove('active');
+    milestonesView.classList.remove('active');
     
     if (viewName === 'stages') {
-        document.getElementById('stagesView').classList.add('active');
+        stagesView.classList.add('active');
+        stagesView.style.display = 'block';
+        milestonesView.style.display = 'none';
+        console.log('显示阶段视图');
     } else if (viewName === 'milestones') {
-        document.getElementById('milestonesView').classList.add('active');
+        milestonesView.classList.add('active');
+        milestonesView.style.display = 'block';
+        stagesView.style.display = 'none';
+        console.log('显示里程碑视图');
+        
+        // 确保里程碑已经渲染
+        const milestoneTimeline = document.getElementById('milestoneTimeline');
+        if (milestoneTimeline && milestoneTimeline.children.length === 0) {
+            console.warn('里程碑容器为空，尝试重新渲染');
+            if (globalData && globalData.milestones) {
+                renderMilestones(globalData);
+            }
+        }
     }
 }
