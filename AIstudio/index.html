@@ -42,7 +42,30 @@
 
 <div class="layout-container">
 
-    <!-- 1. 项目全景概览卡片 (合并了原来的标题和指标区) -->
+    <!-- 1. 警报横幅 (移到最上方 - 优先级最高) -->
+    <div class="alert-row" id="alertBanner" style="display:none;">
+        <div class="arco-alert alert-critical">
+            <div class="alert-icon-box"><i class="fas fa-exclamation-triangle"></i></div>
+            <div class="alert-content">
+                <div class="alert-header-row">
+                    <strong class="alert-title">【建议领导介入】</strong>
+                    <span class="alert-badge" id="supervisionBadge">待督办：0</span>
+                </div>
+                <span class="alert-desc" id="alertDesc">--</span>
+            </div>
+            <div class="alert-actions">
+                <button class="arco-btn btn-ghost-white" onclick="alert('查看督办历史')">
+                    <i class="fas fa-history"></i> 督办历史
+                </button>
+                <button class="arco-btn btn-primary-white" onclick="alert('发起督办')">
+                    <i class="fas fa-paper-plane"></i> 发起督办
+                </button>
+            </div>
+            <button class="alert-close-btn" onclick="this.parentElement.parentElement.style.display='none'"><i class="fas fa-times"></i></button>
+        </div>
+    </div>
+
+    <!-- 2. 项目全景概览卡片 -->
     <div class="arco-card hero-overview-card">
         
         <!-- 上半部分：项目身份信息 -->
@@ -54,7 +77,14 @@
                 </div>
                 <div class="meta-area">
                     <span class="meta-item code-tag" id="pCode">--</span>
-                    <span class="meta-item"><i class="fas fa-user-circle"></i> 负责人：<span id="pLeader">--</span></span>
+                    <span class="meta-item"><i class="fas fa-user-tie"></i> 负责人：<span id="pLeader">--</span></span>
+                    <span class="meta-item"><i class="fas fa-user-cog"></i> 项目经理：<span id="pManager">--</span></span>
+                    <span class="meta-item"><i class="fas fa-building"></i> 承办单位：<span id="pContractor">--</span></span>
+                </div>
+                <!-- 新增：项目总体时间轴 -->
+                <div class="timeline-info" id="projectTimeline" style="display:none;">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span id="timelineText">--</span>
                 </div>
             </div>
             <div class="hero-right">
@@ -105,59 +135,60 @@
             <!-- 竖线分隔 -->
             <div class="vertical-divider"></div>
 
-            <!-- 操作按钮 (右侧) -->
+            <!-- 操作按钮 (右侧 - 调整为次要样式) -->
             <div class="metric-block actions-block">
-                <button class="arco-btn blue-btn" onclick="alert('跳转项目档案')">
+                <button class="arco-btn btn-secondary" onclick="alert('跳转项目档案')">
                     <i class="fas fa-folder-open"></i> 项目档案
                 </button>
-                <button class="arco-btn blue-btn" onclick="alert('跳转督办历史')">
-                    <i class="fas fa-history"></i> 督办历史
+                <button class="arco-btn btn-secondary" onclick="alert('查看完整督办历史')">
+                    <i class="fas fa-history"></i> 督办记录
                 </button>
             </div>
 
         </div>
     </div>
 
-    <!-- 2. 警报横幅 (紧贴概览卡下方) -->
-    <div class="alert-row" id="alertBanner" style="display:none;">
-        <div class="arco-alert">
-            <div class="alert-icon-box"><i class="fas fa-bell"></i></div>
-            <div class="alert-content">
-                <strong class="alert-title">重点关注</strong>
-                <span class="alert-desc" id="alertDesc">--</span>
-            </div>
-            <button class="alert-close-btn" onclick="this.parentElement.parentElement.style.display='none'"><i class="fas fa-times"></i></button>
-        </div>
-    </div>
-
-    <!-- 3. 全生命周期监管 (白色背景无边框) -->
+    <!-- 3. 全生命周期监管 + 里程碑视图 (合并Tab切换) -->
     <section class="lifecycle-section">
         <div class="card-header no-border">
             <div class="card-title">
                 <span class="title-decoration"></span>
-                全生命周期监管
+                全过程监管
             </div>
-            <div class="header-hint">
-                <i class="far fa-hand-pointer"></i> 点击节点查看执行清单
+            <!-- Tab切换器 -->
+            <div class="view-switcher">
+                <button class="view-tab active" data-view="stages" onclick="switchView('stages')">
+                    <i class="fas fa-stream"></i> 阶段视图
+                </button>
+                <button class="view-tab" data-view="milestones" onclick="switchView('milestones')">
+                    <i class="fas fa-flag-checkered"></i> 里程碑视图
+                </button>
             </div>
         </div>
         
-        <!-- 时间轴 -->
-        <div class="lifecycle-steps" id="lifecycleSteps"></div>
+        <!-- 阶段视图 -->
+        <div id="stagesView" class="view-container active">
+            <div class="lifecycle-steps" id="lifecycleSteps"></div>
 
-        <!-- 详情面板 -->
-        <div id="stageDetailPanel" class="stage-detail-panel" style="display:none;">
-            <button class="detail-close-btn" onclick="closeDetailPanel()"><i class="fas fa-times"></i></button>
-            <div class="detail-container">
-                <div class="detail-left">
-                    <h4 class="detail-subtitle">阶段核心指标</h4>
-                    <div class="metrics-grid-blocks" id="detailMetrics"></div>
-                </div>
-                <div class="detail-right">
-                    <h4 class="detail-subtitle">执行清单与状态</h4>
-                    <ul class="task-list-single-col" id="detailTaskList"></ul>
+            <!-- 详情面板 -->
+            <div id="stageDetailPanel" class="stage-detail-panel" style="display:none;">
+                <button class="detail-close-btn" onclick="closeDetailPanel()"><i class="fas fa-times"></i></button>
+                <div class="detail-container">
+                    <div class="detail-left">
+                        <h4 class="detail-subtitle">阶段核心指标</h4>
+                        <div class="metrics-grid-blocks" id="detailMetrics"></div>
+                    </div>
+                    <div class="detail-right">
+                        <h4 class="detail-subtitle">执行清单与状态</h4>
+                        <ul class="task-list-single-col" id="detailTaskList"></ul>
+                    </div>
                 </div>
             </div>
+        </div>
+
+        <!-- 里程碑视图 -->
+        <div id="milestonesView" class="view-container" style="display:none;">
+            <div class="milestone-timeline" id="milestoneTimeline"></div>
         </div>
     </section>
 

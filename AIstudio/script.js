@@ -12,16 +12,47 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initDashboard(data) {
-    // 1. 顶栏信息
+    // 1. 顶栏信息 - 扩展责任体系
     document.getElementById('pName').innerText = data.project_name;
     document.getElementById('pCode').innerText = data.project_code;
-    if (data.team && data.team.leader) {
-        document.getElementById('pLeader').innerText = data.team.leader;
+    
+    if (data.team) {
+        if (data.team.leader) {
+            document.getElementById('pLeader').innerText = data.team.leader;
+        }
+        if (data.team.manager) {
+            document.getElementById('pManager').innerText = data.team.manager;
+        }
+        if (data.team.contractor) {
+            document.getElementById('pContractor').innerText = data.team.contractor;
+        }
     }
+    
     document.getElementById('updateTime').innerText = data.update_time;
 
-    // 2. 警报逻辑
-    if(data.health_status === 'red' || data.risk.high > 0) {
+    // 显示项目总体时间轴
+    if (data.project_timeline) {
+        const timeline = data.project_timeline;
+        const timelineEl = document.getElementById('projectTimeline');
+        const progress = Math.round((timeline.elapsed_days / timeline.total_days) * 100);
+        
+        document.getElementById('timelineText').innerText = 
+            `${timeline.start_date} 至 ${timeline.plan_end_date} | 总工期：${timeline.total_days}天 | 已执行：${timeline.elapsed_days}天 (${progress}%)`;
+        
+        timelineEl.style.display = 'flex';
+    }
+
+    // 2. 警报逻辑（增强版：支持督办信息）
+    if(data.supervision && data.supervision.need_intervention) {
+        document.getElementById('alertBanner').style.display = 'block';
+        document.getElementById('supervisionBadge').innerText = `待督办：${data.supervision.pending_count}`;
+        
+        let alertText = `检测到项目健康分偏低 (${data.health_score}分)，且存在 ${data.risk.high} 项高风险问题`;
+        if (data.supervision.last_comment) {
+            alertText += `。最近督办：${data.supervision.last_comment_by} 于 ${data.supervision.last_comment_date} 指示："${data.supervision.last_comment}"`;
+        }
+        document.getElementById('alertDesc').innerText = alertText;
+    } else if(data.health_status === 'red' || data.risk.high > 0) {
         document.getElementById('alertBanner').style.display = 'block';
         document.getElementById('alertDesc').innerText = `检测到项目健康分偏低 (${data.health_score}分)，且存在 ${data.risk.high} 项高风险问题，建议立即介入。`;
     }
@@ -30,7 +61,7 @@ function initDashboard(data) {
     renderHealthGauge(data.health_score);
     document.getElementById('healthScoreDisplay').innerText = data.health_score;
     
-    // --- 高危标记逻辑 ---
+    // 高危标记逻辑
     const healthTag = document.getElementById('healthStatusTag');
     if (data.health_score < 60) {
         healthTag.style.display = 'inline-block';
@@ -47,7 +78,6 @@ function initDashboard(data) {
     } else {
         healthTag.style.display = 'none';
     }
-    // -------------------
 
     document.getElementById('delayDays').innerText = Math.abs(data.progress.gap);
     document.getElementById('highRiskCount').innerText = data.risk.high;
@@ -56,7 +86,10 @@ function initDashboard(data) {
     // 4. 全生命周期 (Lifecycle)
     renderLifecycle(data);
 
-    // 5. 底部图表 (Dashboard)
+    // 5. 关键里程碑 (新增)
+    renderMilestones(data);
+
+    // 6. 底部图表 (Dashboard)
     renderBottomCharts(data);
 }
 
@@ -68,8 +101,8 @@ function renderLifecycle(data) {
     let html = '';
 
     data.stages.forEach((stage, idx) => {
-        let nodeClass = ''; // 用于控制选中状态（点击高亮）
-        let extraClass = ''; // 用于控制动画（当前进度）
+        let nodeClass = '';
+        let extraClass = '';
         let iconHtml = idx + 1;
         let dateText = '待定';
 
@@ -79,17 +112,12 @@ function renderLifecycle(data) {
             iconHtml = '<i class="fas fa-check"></i>';
             dateText = '已完成';
         } else if (stage.status === 'current') {
-            // --- 新增需求4：给当前环节添加动画类 ---
             extraClass = 'current-process'; 
-            // ------------------------------------
-            
-            // 默认让当前环节也是“选中”状态（用于显示详情），如果不想默认选中可去掉 'selected'
             nodeClass = 'selected'; 
             iconHtml = '<i class="fas fa-play" style="font-size:12px;"></i>';
             dateText = '进行中';
         }
 
-        // 注意：将 extraClass 添加到 class 列表中
         html += `
             <div class="step-node ${nodeClass} ${extraClass}" onclick="openStageDetail(${idx}, this)">
                 <div class="step-icon-wrapper">${iconHtml}</div>
@@ -108,8 +136,6 @@ function openStageDetail(idx, element) {
     
     // UI 选中态切换
     document.querySelectorAll('.step-node').forEach(n => n.classList.remove('selected'));
-    // 如果本来是completed的，保持completed样式，如果是current，它本身就有selected逻辑
-    // 这里为了交互反馈，给点击的节点强制添加selected class（注意CSS优先级，completed样式优先）
     element.classList.add('selected');
 
     // 1. 渲染左侧方块指标
@@ -172,9 +198,84 @@ function openStageDetail(idx, element) {
 
 function closeDetailPanel() {
     document.getElementById('stageDetailPanel').style.display = 'none';
-    // 注意：这里可能需要保留当前阶段的选中状态，或者完全清除
-    // 为了简单起见，清除高亮
-    // document.querySelectorAll('.step-node').forEach(n => n.classList.remove('selected'));
+}
+
+// ----------------------------------------------------
+// 关键里程碑模块（新增）
+// ----------------------------------------------------
+function renderMilestones(data) {
+    if (!data.milestones || data.milestones.length === 0) {
+        document.getElementById('milestoneTimeline').innerHTML = 
+            '<div style="text-align:center; color:#999; padding:40px;">暂无里程碑数据</div>';
+        return;
+    }
+
+    const container = document.getElementById('milestoneTimeline');
+    let html = '';
+
+    data.milestones.forEach(milestone => {
+        let statusClass = 'pending';
+        let statusLabel = '未开始';
+        let iconClass = 'fa-circle';
+        let delayHtml = '';
+
+        if (milestone.status === 'completed') {
+            statusClass = 'completed';
+            statusLabel = '已完成';
+            iconClass = 'fa-check-circle';
+            if (milestone.delay_days > 0) {
+                delayHtml = `<span style="color:${milestone.delay_days > 0 ? '#FF7D00' : '#00B42A'}; font-size:12px;">延期${milestone.delay_days}天</span>`;
+            }
+        } else if (milestone.status === 'delay') {
+            statusClass = 'delay';
+            statusLabel = '已延期';
+            iconClass = 'fa-exclamation-circle';
+            delayHtml = `<span class="milestone-delay-tag"><i class="fas fa-exclamation-triangle"></i> 延期${milestone.delay_days}天</span>`;
+        } else if (milestone.status === 'pending') {
+            statusClass = 'pending';
+            statusLabel = '待开始';
+            iconClass = 'fa-hourglass-half';
+        }
+
+        // 风险指示器
+        let riskHtml = '';
+        if (milestone.risk_level) {
+            riskHtml = `<span class="risk-indicator ${milestone.risk_level}" title="风险等级: ${milestone.risk_level}"></span>`;
+        }
+
+        const actualDateDisplay = milestone.actual_date || '--';
+
+        html += `
+            <div class="milestone-item ${statusClass}">
+                <div class="milestone-name">
+                    <i class="fas ${iconClass}"></i>
+                    ${milestone.name}
+                    ${riskHtml}
+                </div>
+                
+                <div class="milestone-dates">
+                    <div class="date-block">
+                        <div class="date-label">计划完成</div>
+                        <div class="date-value">${milestone.plan_date}</div>
+                    </div>
+                    <div class="date-block">
+                        <div class="date-label">实际完成</div>
+                        <div class="date-value actual">${actualDateDisplay}</div>
+                    </div>
+                </div>
+                
+                <div class="milestone-status-badge ${statusClass}">
+                    ${statusLabel}
+                </div>
+                
+                <div style="min-width: 80px; text-align: right;">
+                    ${delayHtml}
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
 }
 
 // ----------------------------------------------------
@@ -194,11 +295,11 @@ function renderHealthGauge(score) {
             progress: { 
                 show: true, overlap: false, roundCap: true, 
                 itemStyle: { color: color }, 
-                width: 6 // 修改：线条宽度从 8 改为 6，更精致
+                width: 6
             },
             axisLine: { 
                 lineStyle: { 
-                    width: 6, // 修改：线条宽度从 8 改为 6
+                    width: 6,
                     color: [[1, '#E5E6EB']] 
                 } 
             },
@@ -267,29 +368,24 @@ function renderBottomCharts(data) {
         tooltip: { trigger: 'item' },
         legend: {
             orient: 'vertical',
-            right: 0,        // 图例靠右对齐
-            top: 'center',   // 垂直居中
-            itemWidth: 10,   // 图标宽度
-            itemHeight: 10,  // 图标高度
+            right: 0,
+            top: 'center',
+            itemWidth: 10,
+            itemHeight: 10,
             textStyle: { fontSize: 12, color: '#4E5969' },
-            // --- 新增：格式化函数，显示名称和数值 ---
             formatter: function (name) {
                 let value = 0;
-                // 根据名称获取对应的数据值
                 if (name === '高风险') value = data.risk.high;
                 if (name === '中风险') value = data.risk.medium;
                 if (name === '低风险') value = data.risk.low;
-                
-                // 返回格式：名称 + 空格 + 数值
                 return `${name}   ${value}`;
             }
-            // -------------------------------------
         },
         series: [{
             name: '风险分布',
             type: 'pie',
             radius: ['50%', '75%'],
-            center: ['30%', '50%'], // 圆心偏左，给右侧图例留出空间
+            center: ['30%', '50%'],
             avoidLabelOverlap: false,
             label: { show: false },
             data: [
@@ -311,4 +407,25 @@ function renderBottomCharts(data) {
         fChart.resize();
         rChart.resize();
     });
+}
+
+// ----------------------------------------------------
+// Tab切换功能
+// ----------------------------------------------------
+function switchView(viewName) {
+    // 切换Tab状态
+    document.querySelectorAll('.view-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    document.querySelector(`.view-tab[data-view="${viewName}"]`).classList.add('active');
+    
+    // 切换视图容器
+    document.getElementById('stagesView').classList.remove('active');
+    document.getElementById('milestonesView').classList.remove('active');
+    
+    if (viewName === 'stages') {
+        document.getElementById('stagesView').classList.add('active');
+    } else if (viewName === 'milestones') {
+        document.getElementById('milestonesView').classList.add('active');
+    }
 }

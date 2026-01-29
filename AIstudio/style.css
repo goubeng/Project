@@ -2,12 +2,12 @@
    1. Design Tokens (Volcengine / Arco Design)
    ========================================= */
    :root {
-    /* 核心品牌色：蓝紫渐变 */
+    /* æ ¸å¿ƒå“ç‰Œè‰²ï¼šè“ç´«æ¸å˜ */
     --primary-6: #1664FF;
     --primary-gradient: linear-gradient(135deg, #1664FF 0%, #722ED1 100%);
     --primary-light: #E8F3FF;
 
-    /* 辅助色 */
+    /* è¾…åŠ©è‰² */
     --success-6: #00B42A;
     --success-bg: #E8FFEA;
     --warning-6: #FF7D00;
@@ -15,7 +15,7 @@
     --error-6: #F53F3F;
     --error-bg: #FFECE8;
     
-    /* 灰度系统 */
+    /* ç°åº¦ç³»ç»Ÿ */
     --gray-title: #1D2129;
     --gray-text: #4E5969;
     --gray-sub: #86909C;
@@ -33,7 +33,7 @@
    ========================================= */
 html, body {
     width: 100%;
-    overflow-x: hidden; /* 强制禁止横向滚动 */
+    overflow-x: hidden; /* å¼ºåˆ¶ç¦æ­¢æ¨ªå‘æ»šåŠ¨ */
     margin: 0;
     padding: 0;
 }
@@ -46,7 +46,7 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* 全局顶部导航栏 */
+/* å…¨å±€é¡¶éƒ¨å¯¼èˆªæ  */
 .global-navbar {
     width: 100%;
     height: 60px;
@@ -82,7 +82,7 @@ body {
 .user-avatar { width: 24px; height: 24px; background: #E8F3FF; color: #1664FF; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
 .user-name { font-size: 12px; opacity: 0.9; white-space: nowrap; }
 
-/* 内容容器 */
+/* å†…å®¹å®¹å™¨ */
 .layout-container {
     max-width: 1440px;
     margin: 0 auto;
@@ -111,7 +111,7 @@ body {
 .text-warning { color: var(--warning-6); }
 .text-error { color: var(--error-6); }
 
-/* 蓝色实心按钮 */
+/* è“è‰²å®žå¿ƒæŒ‰é’® */
 .arco-btn.blue-btn {
     background: var(--primary-6); color: #fff; border: none;
 }
@@ -134,7 +134,7 @@ body {
 .hero-overview-card {
     background: var(--white);
     border-radius: var(--radius);
-    padding: 24px 32px; /* 舒适的内边距 */
+    padding: 24px 32px; /* èˆ’é€‚çš„å†…è¾¹è· */
     box-shadow: var(--shadow-s);
     border: 1px solid rgba(255, 255, 255, 0.6);
     display: flex;
@@ -260,6 +260,32 @@ body {
 /* Module 3: Actions */
 .actions-block { display: flex; gap: 12px; }
 
+/* 次要按钮样式（灰色边框） */
+.arco-btn.btn-secondary {
+    background: transparent;
+    border: 1px solid var(--gray-border);
+    color: var(--gray-text);
+    height: 32px; padding: 0 16px; font-size: 13px;
+}
+.arco-btn.btn-secondary:hover {
+    border-color: var(--primary-6);
+    color: var(--primary-6);
+    background: var(--primary-light);
+}
+
+/* 项目时间轴信息 */
+.timeline-info {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--gray-text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.timeline-info i {
+    color: var(--primary-6);
+}
+
 /* =========================================
    5. Alert Banner (Row 2)
    ========================================= */
@@ -269,11 +295,53 @@ body {
     padding: 12px 20px; border-radius: 8px;
     display: flex; align-items: center; gap: 12px;
 }
-.alert-icon-box { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; color: var(--error-6); font-size: 16px; flex-shrink: 0;}
-.alert-content { flex: 1; display: flex; flex-direction: column; }
-.alert-title { font-size: 14px; color: #F53F3F; font-weight: 700; margin-bottom: 2px; }
+.arco-alert.alert-critical {
+    background: linear-gradient(135deg, #FFF0F0 0%, #FFE8E8 100%);
+    border: 2px solid #F53F3F;
+    box-shadow: 0 4px 12px rgba(245, 63, 63, 0.15);
+}
+.alert-icon-box { 
+    width: 32px; height: 32px; 
+    display: flex; align-items: center; justify-content: center; 
+    color: var(--error-6); font-size: 20px; flex-shrink: 0;
+    background: rgba(245, 63, 63, 0.1);
+    border-radius: 50%;
+}
+.alert-content { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.alert-header-row { display: flex; align-items: center; gap: 12px; }
+.alert-title { font-size: 14px; color: #F53F3F; font-weight: 700; }
+.alert-badge {
+    background: #F53F3F; color: #fff; 
+    font-size: 12px; font-weight: 600;
+    padding: 2px 8px; border-radius: 4px;
+}
 .alert-desc { font-size: 13px; color: var(--error-6); opacity: 0.9; }
-.alert-close-btn { background: none; border: none; color: var(--gray-sub); cursor: pointer; font-size: 14px; }
+.alert-actions { display: flex; gap: 8px; }
+.arco-btn.btn-ghost-white {
+    background: rgba(255,255,255,0.5); 
+    border: 1px solid rgba(245, 63, 63, 0.3);
+    color: var(--error-6);
+    height: 28px; padding: 0 12px; font-size: 12px;
+}
+.arco-btn.btn-ghost-white:hover {
+    background: rgba(255,255,255,0.8);
+    border-color: var(--error-6);
+}
+.arco-btn.btn-primary-white {
+    background: #F53F3F; color: #fff;
+    border: none;
+    height: 28px; padding: 0 12px; font-size: 12px;
+    font-weight: 600;
+}
+.arco-btn.btn-primary-white:hover {
+    background: #D63031;
+}
+.alert-close-btn { 
+    background: none; border: none; 
+    color: var(--gray-sub); cursor: pointer; 
+    font-size: 14px; flex-shrink: 0;
+    padding: 4px;
+}
 
 /* =========================================
    6. Lifecycle Section (Row 3)
@@ -281,7 +349,7 @@ body {
 .lifecycle-section {
     position: relative;
     padding-top: 20px; padding-bottom: 20px;
-    /* 白色背景，圆角，阴影，无边框 */
+    /* ç™½è‰²èƒŒæ™¯ï¼Œåœ†è§’ï¼Œé˜´å½±ï¼Œæ— è¾¹æ¡† */
     background: var(--white);
     border-radius: var(--radius);
     box-shadow: var(--shadow-s);
@@ -290,7 +358,54 @@ body {
 
 .lifecycle-section .card-header.no-border {
     border-bottom: none; margin-bottom: 24px; padding: 0 24px;
-    display: flex; align-items: center; justify-content: space-between; flex-wrap: nowrap;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
+    gap: 16px;
+}
+
+/* Tab切换器 */
+.view-switcher {
+    display: flex;
+    gap: 8px;
+    background: var(--gray-bg);
+    padding: 4px;
+    border-radius: 6px;
+}
+
+.view-tab {
+    background: transparent;
+    border: none;
+    color: var(--gray-text);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.view-tab:hover {
+    background: rgba(22, 100, 255, 0.08);
+    color: var(--primary-6);
+}
+
+.view-tab.active {
+    background: var(--white);
+    color: var(--primary-6);
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+/* 视图容器 */
+.view-container {
+    display: none;
+}
+
+.view-container.active {
+    display: block;
 }
 .card-title {
     font-size: 16px; font-weight: 700; color: var(--gray-title);
@@ -306,7 +421,7 @@ body {
     white-space: nowrap; flex-shrink: 0; margin-left: auto;
 }
 
-/* 进度轴 */
+/* è¿›åº¦è½´ */
 .lifecycle-steps {
     display: flex; justify-content: space-between; position: relative;
     padding: 10px 40px; margin-bottom: 10px;
@@ -319,7 +434,7 @@ body {
 .step-node:last-child::after { display: none; }
 .step-node.completed::after { background: #00B42A; } 
 
-/* 节点图标 */
+/* èŠ‚ç‚¹å›¾æ ‡ */
 .step-icon-wrapper {
     width: 36px; height: 36px; border-radius: 50%; background: var(--white);
     border: 3px solid var(--gray-border); margin: 0 auto 12px; position: relative; z-index: 1;
@@ -341,10 +456,10 @@ body {
 .step-title { font-size: 14px; font-weight: 600; color: var(--gray-title); margin-bottom: 4px; }
 .step-date { font-size: 12px; color: var(--gray-sub); font-family: 'Inter'; }
 
-/* 详情面板 */
+/* è¯¦æƒ…é¢æ¿ */
 .stage-detail-panel {
     background: #FAFAFA; border-radius: 8px; padding: 24px;
-    /* 上下24px，左右40px间距 */
+    /* ä¸Šä¸‹24pxï¼Œå·¦å³40pxé—´è· */
     margin: 24px 40px; 
     position: relative; border: 1px solid var(--gray-border);
     animation: slideDown 0.3s ease-out;
@@ -395,7 +510,150 @@ body {
 .task-row.pending .task-icon, .task-row.pending .task-status { color: var(--gray-sub); }
 
 /* =========================================
-   7. Dashboard Grid (Row 4)
+    position: relative;
+    padding: 20px 24px 24px;
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-s);
+    border: none;
+    margin-top: 20px;
+}
+
+.milestone-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 10px 0;
+}
+
+.milestone-item {
+    display: grid;
+    grid-template-columns: 180px 1fr 120px 80px;
+    gap: 16px;
+    align-items: center;
+    padding: 16px 20px;
+    background: #FAFAFA;
+    border-radius: 6px;
+    border: 1px solid var(--gray-border);
+    transition: all 0.2s;
+    position: relative;
+}
+
+.milestone-item:hover {
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    transform: translateX(4px);
+}
+
+.milestone-item.completed {
+    border-left: 4px solid var(--success-6);
+}
+
+.milestone-item.delay {
+    border-left: 4px solid var(--error-6);
+    background: linear-gradient(90deg, #FFECE8 0%, #FAFAFA 100%);
+}
+
+.milestone-item.pending {
+    border-left: 4px solid var(--gray-border);
+}
+
+.milestone-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-title);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.milestone-name i {
+    font-size: 16px;
+}
+
+.milestone-dates {
+    display: flex;
+    gap: 24px;
+    font-size: 13px;
+}
+
+.date-block {
+    display: flex;
+    flex-direction: column;
+}
+
+.date-label {
+    font-size: 11px;
+    color: var(--gray-sub);
+    margin-bottom: 2px;
+}
+
+.date-value {
+    font-family: 'Inter', monospace;
+    font-weight: 500;
+    color: var(--gray-title);
+}
+
+.milestone-item.delay .date-value.actual {
+    color: var(--error-6);
+}
+
+.milestone-status-badge {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.milestone-status-badge.completed {
+    background: var(--success-bg);
+    color: var(--success-6);
+}
+
+.milestone-status-badge.delay {
+    background: var(--error-bg);
+    color: var(--error-6);
+}
+
+.milestone-status-badge.pending {
+    background: var(--gray-bg);
+    color: var(--gray-sub);
+}
+
+.milestone-delay-tag {
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Inter';
+    color: var(--error-6);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.risk-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.risk-indicator.high {
+    background: var(--error-6);
+    box-shadow: 0 0 0 3px rgba(245, 63, 63, 0.2);
+}
+
+.risk-indicator.medium {
+    background: var(--warning-6);
+}
+
+.risk-indicator.low {
+    background: var(--success-6);
+}
+
+/* =========================================
+   8. Dashboard Grid (Row 4)
    ========================================= */
 .dashboard-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
 .card-header.small {
@@ -404,7 +662,7 @@ body {
 }
 .card-header.small .card-title { font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* 链接图标：方形图标按钮 */
+/* é“¾æŽ¥å›¾æ ‡ï¼šæ–¹å½¢å›¾æ ‡æŒ‰é’® */
 .link-icon {
     width: 28px; height: 28px; border-radius: 4px; background: var(--gray-bg);
     display: flex; align-items: center; justify-content: center;
@@ -439,7 +697,7 @@ body {
     100% { box-shadow: 0 0 0 0 rgba(22, 100, 255, 0); }
 }
 
-/* 应用动画到当前进行的节点图标 */
+/* åº”ç”¨åŠ¨ç”»åˆ°å½“å‰è¿›è¡Œçš„èŠ‚ç‚¹å›¾æ ‡ */
 .step-node.current-process .step-icon-wrapper {
     background: #1664FF;
     color: #fff;
