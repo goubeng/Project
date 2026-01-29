@@ -1,830 +1,219 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>项目全过程智能监管驾驶舱</title>
-<link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目全过程智能监管驾驶舱</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 </head>
 <body>
 
-<div class="container">
+<div class="layout-container">
 
-  <!-- 核心警报区 - 最优先级 -->
-  <div class="alert-banner" id="alertBanner" style="display:none;">
-    <div class="alert-content">
-      <i class="fas fa-exclamation-triangle"></i>
-      <div class="alert-text">
-        <strong id="alertTitle">重点关注</strong>
-        <span id="alertDesc">项目存在严重延期和高风险</span>
-      </div>
-      <button class="alert-action" onclick="scrollToRisk()">立即查看 →</button>
-    </div>
-  </div>
-
-  <!-- 头部区域 - 重新布局强调健康状态 -->
-  <div class="hero-header">
-    <div class="hero-main">
-      <div class="project-identity">
-        <div class="project-title" id="pName">加载中...</div>
-        <div class="project-meta">
-          <span class="pill-gray" id="pCode">--</span>
-          <span class="pill-status" id="stageStatus">执行中</span>
-        </div>
-      </div>
-
-      <!-- 健康状态核心区 -->
-      <div class="health-center">
-        <div class="health-gauge-wrapper">
-          <div id="healthGauge" style="width: 260px; height: 200px;"></div>
-          <div class="health-label-group">
-            <div class="health-status-badge" id="healthBadge">评估中</div>
-            <div class="health-trend" id="healthTrend">
-              <i class="fas fa-arrow-down"></i>
-              <span>较上周 -5分</span>
+    <!-- 1. Header (纯净白底) -->
+    <header class="header-row arco-card">
+        <div class="project-identity">
+            <h1 class="sys-name" id="pName">加载中...</h1>
+            <div class="tag-group" style="display:flex; gap:8px; margin-left:12px;">
+                <span class="arco-tag" style="background:#E8F3FF; color:#1664FF; padding:2px 8px; border-radius:4px; font-size:12px;">执行中</span>
+                <span class="arco-tag" style="background:#F2F3F5; color:#4E5969; padding:2px 8px; border-radius:4px; font-size:12px;" id="pCode">--</span>
             </div>
-          </div>
+        </div>
+        <div class="header-right">
+            <span class="refresh-time" style="color:#86909C; font-size:13px;">
+                <i class="fas fa-sync-alt"></i> 更新于 <span id="updateTime">--</span>
+            </span>
+        </div>
+    </header>
+
+    <!-- 2. Alert (可关闭) -->
+    <div class="alert-row" id="alertBanner" style="display:none;">
+        <div class="arco-alert" style="background:#FFF0F0; border:1px solid #FFDCDC; color:#1D2129; padding:12px 16px; border-radius:8px; display:flex; align-items:center;">
+            <i class="fas fa-exclamation-circle" style="color:#F53F3F; margin-right:10px;"></i>
+            <span id="alertDesc" style="flex:1; font-size:14px;">--</span>
+            <button style="border:none; background:none; color:#F53F3F; cursor:pointer;">详情 ></button>
+        </div>
+    </div>
+
+    <!-- 3. Key Metrics (渐变卡片 + 统计) -->
+    <div class="metrics-container" style="display:grid; grid-template-columns: 320px 1fr; gap:20px;">
+        <div class="arco-card metric-main">
+            <div style="display:flex; align-items:center; gap:20px;">
+                <div id="healthGauge" style="width:90px; height:90px;"></div>
+                <div>
+                    <div class="health-val" id="healthScoreDisplay" style="font-size:40px; line-height:1;">--</div>
+                    <div style="font-size:13px; color:#86909C; margin-top:5px;">项目健康分</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="arco-card metric-stats" style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="stat-item" style="flex:1; padding:0 20px; border-right:1px solid #E5E6EB;">
+                <div style="color:#86909C; font-size:12px; margin-bottom:4px;">延期天数</div>
+                <div id="delayDays" style="font-size:24px; font-weight:700; color:#F53F3F; font-family:'Inter'">0</div>
+            </div>
+            <div class="stat-item" style="flex:1; padding:0 20px; border-right:1px solid #E5E6EB;">
+                <div style="color:#86909C; font-size:12px; margin-bottom:4px;">高风险项</div>
+                <div id="highRiskCount" style="font-size:24px; font-weight:700; color:#FF7D00; font-family:'Inter'">0</div>
+            </div>
+            <div class="stat-item" style="flex:1; padding:0 20px;">
+                <div style="color:#86909C; font-size:12px; margin-bottom:4px;">资金使用率</div>
+                <div id="fundRate" style="font-size:24px; font-weight:700; color:#1664FF; font-family:'Inter'">0%</div>
+            </div>
+            <!-- 快捷按钮 -->
+            <div style="padding-left:20px; display:flex; gap:10px;">
+                <button class="arco-btn" onclick="alert('档案')"><i class="far fa-folder"></i></button>
+                <button class="arco-btn" onclick="alert('督办')"><i class="fas fa-history"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. 全生命周期监管 (交互重构) -->
+    <section class="arco-card lifecycle-section">
+        <div class="card-header">
+            <div class="card-title">
+                <i class="fas fa-project-diagram" style="color:#1664FF"></i> 全生命周期监管
+            </div>
+            <span style="font-size:12px; color:#86909C;"><i class="fas fa-hand-pointer"></i> 点击节点展开详情</span>
         </div>
         
-        <!-- 关键指标快照 -->
-        <div class="key-metrics-snapshot">
-          <div class="metric-snap danger">
-            <div class="metric-icon"><i class="fas fa-clock"></i></div>
-            <div class="metric-data">
-              <div class="metric-value" id="delayDays">0</div>
-              <div class="metric-label">
-                延期天数
-                <i class="fas fa-info-circle tooltip-trigger" data-tooltip="相对于计划完成时间的延期天数"></i>
-              </div>
+        <!-- 时间轴 (始终显示) -->
+        <div class="lifecycle-steps" id="lifecycleSteps">
+            <!-- JS 填充 -->
+        </div>
+
+        <!-- 详情面板 (默认隐藏，带关闭按钮) -->
+        <div id="stageDetailPanel" class="stage-detail-panel" style="display:none;">
+            <!-- 关闭按钮 -->
+            <div class="detail-close-btn" onclick="closeDetailPanel()" title="关闭详情">
+                <i class="fas fa-times"></i>
             </div>
-          </div>
-          
-          <div class="metric-snap warning">
-            <div class="metric-icon"><i class="fas fa-exclamation-triangle"></i></div>
-            <div class="metric-data">
-              <div class="metric-value" id="highRiskCount">0</div>
-              <div class="metric-label">
-                高风险项
-                <i class="fas fa-info-circle tooltip-trigger" data-tooltip="当前未关闭的高风险事项数量"></i>
-              </div>
+
+            <div class="detail-container">
+                <!-- 左侧：方块指标 (Square Blocks) -->
+                <div class="detail-left">
+                    <h4 class="detail-subtitle"><i class="fas fa-chart-pie"></i> 阶段关键指标</h4>
+                    <div class="metrics-grid-blocks" id="detailMetrics">
+                        <!-- JS 填充方块 -->
+                    </div>
+                </div>
+
+                <!-- 右侧：单列执行清单 -->
+                <div class="detail-right">
+                    <h4 class="detail-subtitle"><i class="fas fa-list-check"></i> 执行清单与状态</h4>
+                    <ul class="task-list-single-col" id="detailTaskList">
+                        <!-- JS 填充列表 -->
+                    </ul>
+                </div>
             </div>
-          </div>
-          
-          <div class="metric-snap info">
-            <div class="metric-icon"><i class="fas fa-coins"></i></div>
-            <div class="metric-data">
-              <div class="metric-value" id="fundRate">0%</div>
-              <div class="metric-label">
-                资金使用率
-                <i class="fas fa-info-circle tooltip-trigger" data-tooltip="已使用资金占总预算的比例"></i>
-              </div>
+        </div>
+    </section>
+
+    <!-- 5. 底部仪表盘 (Row 4) -->
+    <div class="dashboard-grid">
+        <!-- 进度 -->
+        <div class="arco-card">
+            <div class="card-header" style="margin-bottom:10px;">
+                <span style="font-weight:700; font-size:14px; color:#1D2129;">总体进度</span>
+                <i class="fas fa-external-link-alt" style="color:#86909C; font-size:12px; cursor:pointer;"></i>
             </div>
-          </div>
-          
-          <div class="metric-snap">
-            <div class="metric-icon"><i class="fas fa-tasks"></i></div>
-            <div class="metric-data">
-              <div class="metric-value" id="progressGap">0%</div>
-              <div class="metric-label">
-                进度偏差
-                <i class="fas fa-info-circle tooltip-trigger" data-tooltip="实际进度与计划进度的差值"></i>
-              </div>
+            <div id="chartProgress" class="chart-box"></div>
+            <div class="kpi-footer">
+                <div class="kpi-unit">
+                    <span class="kpi-u-label">计划</span>
+                    <span class="kpi-u-val" id="planProgress">0%</span>
+                </div>
+                <div class="kpi-unit">
+                    <span class="kpi-u-label">实际</span>
+                    <span class="kpi-u-val" style="color:#1664FF" id="actualProgress">0%</span>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
 
-      <!-- 团队与督办 -->
-      <div class="hero-sidebar">
-        <div class="team-card">
-          <div class="team-title">项目团队</div>
-          <div class="team-member">
-            <i class="fas fa-user-tie"></i>
-            <div>
-              <div class="member-role">项目负责人</div>
-              <div class="member-name" id="pManager">--</div>
+        <!-- 资金 -->
+        <div class="arco-card">
+            <div class="card-header" style="margin-bottom:10px;">
+                <span style="font-weight:700; font-size:14px; color:#1D2129;">资金支付</span>
+                <i class="fas fa-external-link-alt" style="color:#86909C; font-size:12px; cursor:pointer;"></i>
             </div>
-          </div>
-          <div class="team-member">
-            <i class="fas fa-users"></i>
-            <div>
-              <div class="member-role">实施单位</div>
-              <div class="member-name" id="pVendor">--</div>
+            <div id="chartFund" class="chart-box"></div>
+            <div class="kpi-footer">
+                <div class="kpi-unit">
+                    <span class="kpi-u-label">总预算</span>
+                    <span class="kpi-u-val" id="totalFund">0</span>
+                </div>
+                <div class="kpi-unit">
+                    <span class="kpi-u-label">剩余</span>
+                    <span class="kpi-u-val" style="color:#00B42A" id="remainFund">0</span>
+                </div>
             </div>
-          </div>
         </div>
-        
-        <div class="supervision-quick">
-          <div class="super-title">
-            <i class="fas fa-bell"></i>
-            待办督办
-          </div>
-          <div class="super-count" id="todoCount">0</div>
-          <button class="btn-detail-link" onclick="alert('查看督办历史')">
-            查看全部 <i class="fas fa-arrow-right"></i>
-          </button>
-        </div>
-        
-        <div class="update-timestamp">
-          <i class="fas fa-sync-alt"></i>
-          <span id="updateTime">--</span>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- 全生命周期监管 - 增强版 -->
-  <div class="section-card lifecycle-section">
-    <div class="card-header">
-      <div class="header-left">
-        <i class="fas fa-project-diagram"></i>
-        <span>全生命周期监管</span>
-        <span class="stage-counter" id="stageCounter">当前: 执行与控制 (3/5)</span>
-      </div>
-      <div class="header-right">
-        <span class="hint"><i class="fas fa-hand-pointer"></i> 点击节点查看详情</span>
-      </div>
-    </div>
-    
-    <div class="lifecycle-track" id="lifecycleTrack"></div>
-    
-    <!-- 阶段详情面板 -->
-    <div class="stage-detail-panel" id="stageDetailPanel" style="display:none;">
-      <div class="detail-header">
-        <div class="detail-title-group">
-          <h3 id="modalTitle">阶段名称</h3>
-          <span class="modal-status" id="modalStatus">状态</span>
+        <!-- 风险 -->
+        <div class="arco-card">
+            <div class="card-header" style="margin-bottom:10px;">
+                <span style="font-weight:700; font-size:14px; color:#1D2129;">风险管控</span>
+                <i class="fas fa-shield-alt" style="color:#86909C; font-size:12px; cursor:pointer;"></i>
+            </div>
+            <div style="height:140px; padding-top:10px;">
+                <div class="risk-row">
+                    <div class="risk-tag bg-r-high">高</div>
+                    <div class="risk-bar-bg"><div class="risk-bar-fill bg-r-high" id="barHigh" style="width:0%"></div></div>
+                    <span style="font-weight:700; width:20px; text-align:right" id="valHigh">0</span>
+                </div>
+                <div class="risk-row">
+                    <div class="risk-tag bg-r-med">中</div>
+                    <div class="risk-bar-bg"><div class="risk-bar-fill bg-r-med" id="barMed" style="width:0%"></div></div>
+                    <span style="font-weight:700; width:20px; text-align:right" id="valMed">0</span>
+                </div>
+                <div class="risk-row">
+                    <div class="risk-tag bg-r-low">低</div>
+                    <div class="risk-bar-bg"><div class="risk-bar-fill bg-r-low" id="barLow" style="width:0%"></div></div>
+                    <span style="font-weight:700; width:20px; text-align:right" id="valLow">0</span>
+                </div>
+            </div>
+            <div class="kpi-footer">
+                <div class="kpi-unit">
+                    <span class="kpi-u-label">风险总数</span>
+                    <span class="kpi-u-val" id="riskTotal">0</span>
+                </div>
+            </div>
         </div>
-        <button class="close-btn" onclick="closeDetail()">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-      
-      <div class="detail-body">
-        <div class="metrics-section">
-          <h4><i class="fas fa-chart-bar"></i> 关键指标</h4>
-          <div class="metrics-grid" id="modalMetrics"></div>
-        </div>
-        
-        <div class="tasks-section">
-          <h4><i class="fas fa-list-check"></i> 执行清单</h4>
-          <ul class="task-list" id="modalSubtasks"></ul>
-        </div>
-      </div>
-      
-      <div class="detail-actions">
-        <button class="action-btn" onclick="alert('打开阶段文档库')">
-          <i class="fas fa-folder-open"></i> 查看文档
-        </button>
-        <button class="action-btn" onclick="alert('查看审批记录')">
-          <i class="fas fa-file-signature"></i> 审批记录
-        </button>
-        <button class="action-btn primary" onclick="alert('添加督办')">
-          <i class="fas fa-plus"></i> 添加督办
-        </button>
-      </div>
-    </div>
-  </div>
 
-  <!-- 关键里程碑与工期 -->
-  <div class="section-card milestone-section">
-    <div class="card-header">
-      <div class="header-left">
-        <i class="fas fa-flag-checkered"></i>
-        <span>关键里程碑</span>
-        <i class="fas fa-info-circle tooltip-trigger" data-tooltip="展示项目主要节点的计划与实际完成情况"></i>
-      </div>
-      <div class="header-right">
-        <button class="btn-icon" onclick="alert('查看甘特图详细视图')">
-          <i class="fas fa-expand-alt"></i>
-        </button>
-      </div>
+        <!-- 问题 -->
+        <div class="arco-card">
+            <div class="card-header" style="margin-bottom:10px;">
+                <span style="font-weight:700; font-size:14px; color:#1D2129;">问题与变更</span>
+                <i class="fas fa-list" style="color:#86909C; font-size:12px; cursor:pointer;"></i>
+            </div>
+            <div style="display:flex; height:140px; align-items:center;">
+                <div style="flex:1; text-align:center;">
+                    <div style="font-size:32px; font-weight:700; color:#F53F3F; font-family:'Inter'" id="majorIssues">0</div>
+                    <div style="font-size:12px; color:#86909C;">重大问题</div>
+                </div>
+                <div style="width:1px; height:50px; background:#E5E6EB;"></div>
+                <div style="flex:1; text-align:center;">
+                    <div style="font-size:32px; font-weight:700; color:#1664FF; font-family:'Inter'" id="openIssues">0</div>
+                    <div style="font-size:12px; color:#86909C;">待解决</div>
+                </div>
+            </div>
+            <div class="kpi-footer">
+                <div class="kpi-unit">
+                    <span class="kpi-u-label">本周新增</span>
+                    <span class="kpi-u-val">2</span>
+                </div>
+                <div class="kpi-unit">
+                    <span class="kpi-u-label">已解决</span>
+                    <span class="kpi-u-val" style="color:#00B42A">1</span>
+                </div>
+            </div>
+        </div>
     </div>
-    
-    <div class="milestone-timeline" id="milestoneTimeline"></div>
-  </div>
-
-  <!-- 核心监控仪表盘 -->
-  <div class="dashboard-grid">
-    <!-- 进度对比 -->
-    <div class="kpi-card progress-card">
-      <div class="kpi-header">
-        <div class="kpi-title">
-          <i class="fas fa-tasks"></i>
-          总体进度
-        </div>
-        <div class="kpi-actions">
-          <i class="fas fa-info-circle tooltip-trigger" data-tooltip="计划进度 vs 实际进度对比"></i>
-          <i class="fas fa-expand-alt action-icon" onclick="alert('查看甘特图详细视图')"></i>
-        </div>
-      </div>
-      <div id="chartProgress" class="chart-container"></div>
-      <div class="kpi-footer">
-        <div class="footer-item">
-          <span class="label">计划进度</span>
-          <span class="value" id="planProgress">0%</span>
-        </div>
-        <div class="footer-item">
-          <span class="label">实际进度</span>
-          <span class="value accent" id="actualProgress">0%</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 资金支付 -->
-    <div class="kpi-card fund-card">
-      <div class="kpi-header">
-        <div class="kpi-title">
-          <i class="fas fa-wallet"></i>
-          资金支付
-        </div>
-        <div class="kpi-actions">
-          <i class="fas fa-info-circle tooltip-trigger" data-tooltip="项目资金使用情况与预算对比"></i>
-          <i class="fas fa-file-invoice-dollar action-icon" onclick="alert('查看资金支付台账')"></i>
-        </div>
-      </div>
-      <div id="chartFund" class="chart-container"></div>
-      <div class="kpi-footer fund-footer">
-        <div class="fund-stat">
-          <div class="stat-row">
-            <span>总预算</span>
-            <span class="amount" id="totalFund">0</span>
-          </div>
-          <div class="stat-row">
-            <span>已使用</span>
-            <span class="amount used" id="usedFund">0</span>
-          </div>
-          <div class="stat-row">
-            <span>剩余</span>
-            <span class="amount remain" id="remainFund">0</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 风险管控 -->
-    <div class="kpi-card risk-card">
-      <div class="kpi-header">
-        <div class="kpi-title">
-          <i class="fas fa-shield-alt"></i>
-          风险管控
-        </div>
-        <div class="kpi-actions">
-          <i class="fas fa-info-circle tooltip-trigger" data-tooltip="当前项目风险总览与高风险预警"></i>
-          <i class="fas fa-exclamation-triangle action-icon" onclick="alert('进入风险管理系统')"></i>
-        </div>
-      </div>
-      <div class="risk-visual">
-        <div class="risk-gauge">
-          <div class="risk-number" id="riskTotalNum">0</div>
-          <div class="risk-label">风险总数</div>
-        </div>
-        <div class="risk-breakdown">
-          <div class="risk-level high">
-            <div class="level-dot"></div>
-            <span>高风险</span>
-            <strong id="riskHigh">0</strong>
-          </div>
-          <div class="risk-level medium">
-            <div class="level-dot"></div>
-            <span>中风险</span>
-            <strong id="riskMedium">0</strong>
-          </div>
-          <div class="risk-level low">
-            <div class="level-dot"></div>
-            <span>低风险</span>
-            <strong id="riskLow">0</strong>
-          </div>
-        </div>
-      </div>
-      <button class="btn-risk-detail" onclick="alert('查看风险台账')">
-        查看风险台账 <i class="fas fa-arrow-right"></i>
-      </button>
-    </div>
-
-    <!-- 问题与变更 -->
-    <div class="kpi-card issue-card">
-      <div class="kpi-header">
-        <div class="kpi-title">
-          <i class="fas fa-exclamation-circle"></i>
-          问题与变更
-        </div>
-        <div class="kpi-actions">
-          <i class="fas fa-info-circle tooltip-trigger" data-tooltip="未解决问题与变更审批情况"></i>
-        </div>
-      </div>
-      <div class="issue-stats">
-        <div class="issue-item">
-          <div class="issue-count major" id="majorIssues">0</div>
-          <div class="issue-desc">重大问题</div>
-        </div>
-        <div class="divider"></div>
-        <div class="issue-item">
-          <div class="issue-count" id="openIssues">0</div>
-          <div class="issue-desc">待解决问题</div>
-        </div>
-        <div class="divider"></div>
-        <div class="issue-item">
-          <div class="issue-count" id="changes">0</div>
-          <div class="issue-desc">变更审批中</div>
-        </div>
-      </div>
-      <div class="issue-trend">
-        <span>本周新增: <strong id="weeklyNew">0</strong></span>
-        <span>本周解决: <strong id="weeklySolved">0</strong></span>
-      </div>
-    </div>
-  </div>
-
-  <!-- 底部快捷操作 -->
-  <div class="quick-actions">
-    <button class="action-card" onclick="alert('查看项目全景档案')">
-      <i class="fas fa-folder-open"></i>
-      <span>项目档案</span>
-    </button>
-    <button class="action-card" onclick="alert('生成项目报告')">
-      <i class="fas fa-file-alt"></i>
-      <span>生成报告</span>
-    </button>
-    <button class="action-card" onclick="alert('导出数据')">
-      <i class="fas fa-download"></i>
-      <span>导出数据</span>
-    </button>
-    <button class="action-card" onclick="openSupervisionModal()">
-      <i class="fas fa-history"></i>
-      <span>督办历史</span>
-    </button>
-  </div>
-
 </div>
 
-<!-- Tooltip容器 -->
-<div class="tooltip" id="tooltip"></div>
-
-<script>
-let globalData = null;
-
-// 初始化
-fetch('data.json').then(res=>res.json()).then(data => {
-    globalData = data;
-    renderAll(data);
-    initTooltips();
-});
-
-function renderAll(data) {
-    renderAlertBanner(data);
-    renderHeader(data);
-    renderLifecycle(data);
-    renderMilestones(data);
-    renderCharts(data);
-}
-
-// 1. 警报横幅
-function renderAlertBanner(data) {
-    if(data.health_status === 'red' || data.progress.gap < -10 || data.risk.high >= 2) {
-        const banner = document.getElementById('alertBanner');
-        banner.style.display = 'block';
-        
-        let alerts = [];
-        if(data.progress.gap < -10) alerts.push('严重延期');
-        if(data.risk.high >= 2) alerts.push(`${data.risk.high}个高风险`);
-        if(data.fund.rate > 95) alerts.push('资金接近上限');
-        
-        document.getElementById('alertTitle').innerText = '⚠️ 重点关注';
-        document.getElementById('alertDesc').innerText = `项目存在: ${alerts.join('、')}`;
-    }
-}
-
-// 2. 渲染头部
-function renderHeader(data) {
-    document.getElementById("pName").innerText = data.project_name;
-    document.getElementById("pCode").innerText = data.project_code;
-    document.getElementById("pManager").innerText = data.team.manager;
-    document.getElementById("pVendor").innerText = data.team.vendor;
-    document.getElementById("updateTime").innerText = '更新于 ' + data.update_time;
-    
-    // 当前阶段
-    const currentStage = data.stages[data.current_stage_index];
-    document.getElementById("stageStatus").innerText = currentStage.name;
-    document.getElementById("stageCounter").innerText = `当前: ${currentStage.name} (${data.current_stage_index + 1}/${data.stages.length})`;
-    
-    // 健康状态
-    const healthTexts = {
-        'green': '健康',
-        'yellow': '预警', 
-        'red': '高危'
-    };
-    const badge = document.getElementById("healthBadge");
-    badge.innerText = healthTexts[data.health_status] || '评估中';
-    badge.className = 'health-status-badge ' + data.health_status;
-    
-    // 趋势
-    const trend = document.getElementById("healthTrend");
-    const trendIcon = data.health_trend >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
-    const trendClass = data.health_trend >= 0 ? 'positive' : 'negative';
-    trend.innerHTML = `<i class="fas ${trendIcon}"></i><span>较上周 ${data.health_trend > 0 ? '+' : ''}${data.health_trend}分</span>`;
-    trend.className = 'health-trend ' + trendClass;
-    
-    // 关键指标
-    document.getElementById("delayDays").innerText = Math.abs(data.progress.gap);
-    document.getElementById("highRiskCount").innerText = data.risk.high;
-    document.getElementById("fundRate").innerText = data.fund.rate + '%';
-    document.getElementById("progressGap").innerText = data.progress.gap + '%';
-    document.getElementById("todoCount").innerText = data.issues.open;
-    
-    // 仪表盘
-    const gauge = echarts.init(document.getElementById('healthGauge'));
-    gauge.setOption({
-        series: [{
-            type: 'gauge',
-            startAngle: 180,
-            endAngle: 0,
-            min: 0,
-            max: 100,
-            splitNumber: 4,
-            itemStyle: {
-                color: data.health_status === 'red' ? '#ef4444' : (data.health_status === 'yellow' ? '#f59e0b' : '#10b981')
-            },
-            progress: {
-                show: true,
-                width: 22,
-                roundCap: true
-            },
-            pointer: { show: false },
-            axisLine: {
-                lineStyle: {
-                    width: 22,
-                    color: [[1, '#f3f4f6']]
-                }
-            },
-            axisTick: { show: false },
-            splitLine: {
-                distance: -28,
-                length: 14,
-                lineStyle: {
-                    width: 2,
-                    color: '#fff'
-                }
-            },
-            axisLabel: {
-                distance: 35,
-                color: '#64748b',
-                fontSize: 13,
-                fontWeight: 600
-            },
-            detail: {
-                valueAnimation: true,
-                offsetCenter: [0, '25%'],
-                fontSize: 56,
-                fontWeight: 900,
-                formatter: '{value}',
-                color: '#1e293b',
-                fontFamily: 'JetBrains Mono'
-            },
-            data: [{ value: data.health_score }]
-        }]
-    });
-}
-
-// 3. 生命周期轨道
-function renderLifecycle(data) {
-    const track = document.getElementById("lifecycleTrack");
-    let html = '';
-    
-    data.stages.forEach((stage, idx) => {
-        let stateClass = '';
-        let statusIcon = '';
-        
-        if(stage.status === 'completed') {
-            stateClass = 'completed';
-            statusIcon = '<i class="fas fa-check"></i>';
-        } else if(stage.status === 'current') {
-            stateClass = 'current';
-            statusIcon = '<i class="fas fa-play"></i>';
-        } else {
-            stateClass = 'pending';
-            statusIcon = '<i class="far fa-circle"></i>';
-        }
-        
-        // 检查是否有延期
-        const hasDelay = stage.metrics.duration && stage.metrics.duration.includes('延期');
-        const delayBadge = hasDelay ? '<div class="delay-badge"><i class="fas fa-exclamation-triangle"></i></div>' : '';
-        
-        html += `
-            <div class="stage-node ${stateClass}" onclick="openStageDetail(${idx}, this)">
-                <div class="node-icon">${statusIcon}</div>
-                <div class="node-label">${stage.name}</div>
-                <div class="node-meta">
-                    <span class="node-tasks">${stage.sub_tasks.length}项</span>
-                    ${stage.metrics.duration ? `<span class="node-duration">${stage.metrics.duration}</span>` : ''}
-                </div>
-                ${delayBadge}
-            </div>
-        `;
-        
-        if(idx < data.stages.length - 1) {
-            const lineClass = stage.status === 'completed' ? 'active' : '';
-            html += `<div class="stage-connector ${lineClass}"></div>`;
-        }
-    });
-    
-    track.innerHTML = html;
-}
-
-// 4. 打开阶段详情
-function openStageDetail(index, element) {
-    const stage = globalData.stages[index];
-    const panel = document.getElementById("stageDetailPanel");
-    
-    document.getElementById("modalTitle").innerText = stage.name;
-    
-    const statusTexts = {
-        'completed': '已完成',
-        'current': '进行中',
-        'pending': '未开始'
-    };
-    const statusBadge = document.getElementById("modalStatus");
-    statusBadge.innerText = statusTexts[stage.status];
-    statusBadge.className = 'modal-status ' + stage.status;
-    
-    // 指标
-    let metricsHtml = '';
-    Object.entries(stage.metrics).forEach(([key, value]) => {
-        const labels = {
-            'duration': '工期',
-            'docs_count': '文档数',
-            'approval_rate': '审批通过率',
-            'budget_check': '预算状态',
-            'risk_count': '风险数'
-        };
-        metricsHtml += `
-            <div class="metric-card">
-                <div class="metric-label">${labels[key] || key}</div>
-                <div class="metric-value">${value}</div>
-            </div>
-        `;
-    });
-    document.getElementById("modalMetrics").innerHTML = metricsHtml;
-    
-    // 子任务
-    let tasksHtml = '';
-    stage.sub_tasks.forEach(task => {
-        let icon = '';
-        let statusClass = '';
-        
-        if(task.status === 'done') {
-            icon = '<i class="fas fa-check-circle"></i>';
-            statusClass = 'done';
-        } else if(task.status === 'delay') {
-            icon = '<i class="fas fa-exclamation-circle"></i>';
-            statusClass = 'delay';
-        } else {
-            icon = '<i class="far fa-circle"></i>';
-            statusClass = 'pending';
-        }
-        
-        tasksHtml += `<li class="${statusClass}">${icon}<span>${task.name}</span></li>`;
-    });
-    document.getElementById("modalSubtasks").innerHTML = tasksHtml;
-    
-    panel.style.display = "block";
-    
-    document.querySelectorAll('.stage-node').forEach(n => n.classList.remove('selected'));
-    element.classList.add('selected');
-}
-
-function closeDetail() {
-    document.getElementById("stageDetailPanel").style.display = "none";
-    document.querySelectorAll('.stage-node').forEach(n => n.classList.remove('selected'));
-}
-
-// 5. 里程碑时间轴
-function renderMilestones(data) {
-    const container = document.getElementById("milestoneTimeline");
-    let html = '';
-    
-    data.milestones.forEach((milestone, idx) => {
-        let statusClass = milestone.status;
-        let statusIcon = '';
-        let statusText = '';
-        
-        if(milestone.status === 'done') {
-            statusIcon = '<i class="fas fa-check-circle"></i>';
-            statusText = '已完成';
-        } else if(milestone.status === 'delay') {
-            statusIcon = '<i class="fas fa-exclamation-triangle"></i>';
-            statusText = '延期';
-        } else {
-            statusIcon = '<i class="far fa-clock"></i>';
-            statusText = '计划中';
-        }
-        
-        html += `
-            <div class="milestone-item ${statusClass}">
-                <div class="milestone-marker">${statusIcon}</div>
-                <div class="milestone-content">
-                    <div class="milestone-header">
-                        <span class="milestone-name">${milestone.name}</span>
-                        <span class="milestone-status">${statusText}</span>
-                    </div>
-                    <div class="milestone-date">${milestone.date}</div>
-                </div>
-            </div>
-        `;
-    });
-    
-    container.innerHTML = html;
-}
-
-// 6. 图表渲染
-function renderCharts(data) {
-    // 进度对比
-    const pChart = echarts.init(document.getElementById('chartProgress'));
-    pChart.setOption({
-        grid: {
-            top: 20,
-            bottom: 20,
-            left: 10,
-            right: 30,
-            containLabel: true
-        },
-        xAxis: {
-            type: 'value',
-            max: 100,
-            axisLabel: {
-                formatter: '{value}%',
-                color: '#64748b',
-                fontSize: 11
-            },
-            splitLine: {
-                lineStyle: {
-                    color: '#f1f5f9',
-                    type: 'dashed'
-                }
-            }
-        },
-        yAxis: {
-            type: 'category',
-            data: ['计划', '实际'],
-            axisLine: { show: false },
-            axisTick: { show: false },
-            axisLabel: {
-                color: '#475569',
-                fontSize: 13,
-                fontWeight: 600
-            }
-        },
-        series: [{
-            type: 'bar',
-            data: [
-                data.progress.plan,
-                {
-                    value: data.progress.actual,
-                    itemStyle: {
-                        color: data.progress.actual < data.progress.plan ? '#ef4444' : '#10b981'
-                    }
-                }
-            ],
-            label: {
-                show: true,
-                position: 'right',
-                formatter: '{c}%',
-                color: '#1e293b',
-                fontWeight: 600,
-                fontSize: 13
-            },
-            barWidth: 20,
-            itemStyle: {
-                color: '#3b82f6',
-                borderRadius: [0, 4, 4, 0]
-            }
-        }]
-    });
-    
-    document.getElementById("planProgress").innerText = data.progress.plan + '%';
-    document.getElementById("actualProgress").innerText = data.progress.actual + '%';
-    
-    // 资金使用
-    const fChart = echarts.init(document.getElementById('chartFund'));
-    fChart.setOption({
-        tooltip: {
-            trigger: 'item',
-            formatter: '{b}: {c}万 ({d}%)'
-        },
-        series: [{
-            type: 'pie',
-            radius: ['55%', '75%'],
-            center: ['50%', '50%'],
-            avoidLabelOverlap: false,
-            label: { show: false },
-            emphasis: {
-                label: {
-                    show: true,
-                    fontSize: 16,
-                    fontWeight: 'bold'
-                }
-            },
-            data: [
-                {
-                    value: data.fund.used,
-                    name: '已使用',
-                    itemStyle: { color: '#3b82f6' }
-                },
-                {
-                    value: data.fund.total - data.fund.used,
-                    name: '剩余',
-                    itemStyle: { color: '#e5e7eb' }
-                }
-            ]
-        }]
-    });
-    
-    document.getElementById("totalFund").innerText = data.fund.total + '万';
-    document.getElementById("usedFund").innerText = data.fund.used + '万';
-    document.getElementById("remainFund").innerText = (data.fund.total - data.fund.used) + '万';
-    
-    // 风险数据
-    document.getElementById("riskTotalNum").innerText = data.risk.total;
-    document.getElementById("riskHigh").innerText = data.risk.high;
-    document.getElementById("riskMedium").innerText = Math.floor(data.risk.total * 0.4);
-    document.getElementById("riskLow").innerText = data.risk.total - data.risk.high - Math.floor(data.risk.total * 0.4);
-    
-    // 问题数据
-    document.getElementById("majorIssues").innerText = data.issues.major;
-    document.getElementById("openIssues").innerText = data.issues.open;
-    document.getElementById("changes").innerText = '0'; // 示例数据
-    document.getElementById("weeklyNew").innerText = '2';
-    document.getElementById("weeklySolved").innerText = '1';
-}
-
-// Tooltip功能
-function initTooltips() {
-    const triggers = document.querySelectorAll('.tooltip-trigger');
-    const tooltip = document.getElementById('tooltip');
-    
-    triggers.forEach(trigger => {
-        trigger.addEventListener('mouseenter', (e) => {
-            const text = e.target.getAttribute('data-tooltip');
-            tooltip.innerText = text;
-            tooltip.style.display = 'block';
-            
-            const rect = e.target.getBoundingClientRect();
-            tooltip.style.left = rect.left + 'px';
-            tooltip.style.top = (rect.bottom + 8) + 'px';
-        });
-        
-        trigger.addEventListener('mouseleave', () => {
-            tooltip.style.display = 'none';
-        });
-    });
-}
-
-function scrollToRisk() {
-    document.querySelector('.risk-card').scrollIntoView({ behavior: 'smooth' });
-}
-
-function openSupervisionModal() {
-    const historyData = [
-        {date: '2026-01-25', leader: '王局长', content: '资金支付过快,请核实。', reply: '已核实,包含硬件提前采购款。'},
-        {date: '2025-12-10', leader: '张区长', content: '务必保证1月底前完成核心模块。', reply: '正在赶工中。'}
-    ];
-    
-    let listHtml = historyData.map(item => `
-        <div class="history-item">
-            <div class="h-header">
-                <strong>${item.leader}</strong>
-                <span class="h-date">${item.date}</span>
-            </div>
-            <div class="h-content"><strong>批示:</strong> ${item.content}</div>
-            <div class="h-reply"><strong>反馈:</strong> ${item.reply}</div>
-        </div>
-    `).join('');
-
-    showGenericModal("领导督办历史", listHtml);
-}
-
-function showGenericModal(title, content) {
-    const modal = document.createElement('div');
-    modal.className = 'full-screen-modal';
-    modal.innerHTML = `
-        <div class="modal-overlay" onclick="this.parentElement.remove()"></div>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>${title}</h3>
-                <button onclick="this.parentElement.parentElement.parentElement.remove()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">${content}</div>
-        </div>
-    `;
-    document.body.appendChild(modal);
-}
-</script>
+<script src="script.js"></script>
 </body>
 </html>
