@@ -129,28 +129,141 @@ body {
 .tag-gray { background: var(--gray-border); color: var(--gray-text); }
 
 /* =========================================
-   4. Project Header (Row 1)
+   4. Hero Overview Card (Merged Header & Metrics)
    ========================================= */
-.header-row.arco-card {
+.hero-overview-card {
     background: var(--white);
-    box-shadow: var(--shadow-s);
-    border: 1px solid rgba(0,0,0,0.02);
     border-radius: var(--radius);
-    padding: 20px 24px;
+    padding: 24px 32px; /* 舒适的内边距 */
+    box-shadow: var(--shadow-s);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    display: flex;
+    flex-direction: column;
     margin-bottom: 0;
 }
 
-.header-row { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 10px; }
-.header-left { display: flex; flex-direction: column; gap: 8px; }
+/* --- Upper Part: Header --- */
+.hero-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
 
-.sys-name { margin: 0; font-size: 22px; font-weight: 700; color: var(--gray-title); display: flex; align-items: center; gap: 12px; flex-wrap: wrap;}
-.tag-group { display: flex; gap: 8px; }
-.refresh-time { font-size: 13px; color: var(--gray-sub); display: flex; align-items: center; gap: 6px; white-space: nowrap;}
+.hero-left .title-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+.hero-left .sys-name {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--gray-title);
+    margin: 0;
+}
+
+.hero-left .meta-area {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: var(--gray-text);
+    font-size: 13px;
+    flex-wrap: wrap;
+}
+
+.code-tag {
+    background: #F2F3F5;
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: var(--gray-sub);
+    font-family: 'Inter', monospace;
+}
+
+.hero-right .refresh-time {
+    font-size: 13px;
+    color: var(--gray-sub);
+}
+
+/* --- Divider --- */
+.hero-divider {
+    height: 1px;
+    background: #E5E6EB;
+    width: 100%;
+    margin-bottom: 24px;
+    opacity: 0.6;
+}
+
+/* --- Lower Part: Metrics --- */
+.hero-metrics-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.vertical-divider {
+    width: 1px;
+    height: 40px;
+    background: #E5E6EB;
+    margin: 0 32px;
+}
+
+/* Module 1: Health */
+.health-block {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 220px;
+}
+.gauge-chart-small { width: 70px; height: 70px; }
+.health-value-row { display: flex; align-items: center; gap: 8px; }
+.main-score {
+    font-size: 40px;
+    font-weight: 800;
+    color: var(--gray-title);
+    line-height: 1;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: -1px;
+}
+.health-status-badge {
+    background: #FFECE8; color: #F53F3F; font-size: 12px; font-weight: 600;
+    padding: 2px 6px; border-radius: 4px; border: 1px solid #FFDCDC;
+    display: inline-block; white-space: nowrap;
+}
+.sub-label { font-size: 13px; color: var(--gray-sub); margin-top: 4px; }
+
+/* Module 2: Stats */
+.stats-block {
+    display: flex;
+    flex: 1;
+    justify-content: space-around;
+    gap: 20px;
+}
+.stat-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 80px;
+}
+.stat-unit .stat-val {
+    font-size: 28px;
+    font-weight: 700;
+    font-family: 'Inter';
+    line-height: 1.2;
+    margin-bottom: 4px;
+}
+.stat-unit .stat-lbl { font-size: 12px; color: var(--gray-sub); }
+
+/* Module 3: Actions */
+.actions-block { display: flex; gap: 12px; }
 
 /* =========================================
    5. Alert Banner (Row 2)
    ========================================= */
-.alert-row { margin-bottom: 0; }
+.alert-row { margin-top: 16px; }
 .arco-alert {
     background: #FFF0F0; border: 1px solid #FFDCDC;
     padding: 12px 20px; border-radius: 8px;
@@ -158,81 +271,27 @@ body {
 }
 .alert-icon-box { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; color: var(--error-6); font-size: 16px; flex-shrink: 0;}
 .alert-content { flex: 1; display: flex; flex-direction: column; }
-.alert-title {
-    font-size: 14px;
-    color: #F53F3F; /* 原为 var(--gray-title)，改为红色 */
-    font-weight: 700; /* 加粗使其更明显 */
-    margin-bottom: 2px;
-}
-
+.alert-title { font-size: 14px; color: #F53F3F; font-weight: 700; margin-bottom: 2px; }
 .alert-desc { font-size: 13px; color: var(--error-6); opacity: 0.9; }
 .alert-close-btn { background: none; border: none; color: var(--gray-sub); cursor: pointer; font-size: 14px; }
 
 /* =========================================
-   6. Metrics Area (Row 3)
+   6. Lifecycle Section (Row 3)
    ========================================= */
-.metrics-container { display: grid; grid-template-columns: 320px 1fr; gap: 20px; }
-
-.metric-main {
-    background: var(--white);
-    display: flex; align-items: center; justify-content: center;
-}
-.metric-content { display: flex; align-items: center; gap: 24px; }
-.gauge-chart { width: 90px; height: 90px; }
-
-.health-text { text-align: left; }
-.health-val-group { display: flex; align-items: center; gap: 8px; }
-.health-val { font-size: 36px; font-weight: 800; color: var(--gray-title); line-height: 1; letter-spacing: -1px; }
-
-/* 高危标签 */
-.health-status-badge {
-    background: #FFECE8; color: #F53F3F; font-size: 12px; font-weight: 600;
-    padding: 2px 6px; border-radius: 4px; border: 1px solid #FFDCDC;
-    display: inline-block; vertical-align: middle; white-space: nowrap;
-}
-.health-label { font-size: 14px; color: var(--gray-sub); margin-top: 4px; }
-
-.metric-stats { display: flex; align-items: center; justify-content: space-between; padding-right: 24px; flex-wrap: wrap; }
-.stat-item {
-    flex: 1; border-right: 1px solid var(--gray-border); padding: 0 32px;
-    display: flex; flex-direction: column; justify-content: center; min-width: 100px;
-}
-.stat-item:last-of-type { border-right: none; }
-.stat-value { font-size: 28px; font-weight: 700; font-family: 'Inter'; margin-bottom: 4px; }
-.stat-label { font-size: 13px; color: var(--gray-sub); }
-
-.quick-actions { display: flex; gap: 12px; padding-left: 24px; flex-shrink: 0; }
-
-/* =========================================
-   7. Lifecycle Section (Row 4)
-   ========================================= */
-   .lifecycle-section {
+.lifecycle-section {
     position: relative;
-    padding-top: 20px; /* 稍微增加顶部内边距 */
-    padding-bottom: 20px; /* 增加底部内边距 */
-    
-    /* 修改这里：将 transparent 改为 white */
-    background: var(--white); 
-    
-    /* 建议：加上圆角和轻微阴影，否则白色方块在灰底上会很生硬 */
+    padding-top: 20px; padding-bottom: 20px;
+    /* 白色背景，圆角，阴影，无边框 */
+    background: var(--white);
     border-radius: var(--radius);
     box-shadow: var(--shadow-s);
-
-    /* 保持无边框 */
-    border: none; 
+    border: none;
 }
 
-/* 确保头部有一定的内边距 */
 .lifecycle-section .card-header.no-border {
-    border-bottom: none; 
-    margin-bottom: 24px; 
-    padding: 0 24px; /* 增加左右内边距，防止文字贴边 */
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
-    flex-wrap: nowrap;
+    border-bottom: none; margin-bottom: 24px; padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: nowrap;
 }
-
 .card-title {
     font-size: 16px; font-weight: 700; color: var(--gray-title);
     position: relative; display: flex; align-items: center; gap: 8px; white-space: nowrap;
@@ -253,14 +312,12 @@ body {
     padding: 10px 40px; margin-bottom: 10px;
 }
 .step-node { flex: 1; text-align: center; position: relative; cursor: pointer; }
-
-/* 连接线 */
 .step-node::after {
     content: ''; position: absolute; top: 18px; left: 50%; width: 100%; height: 3px;
     background: var(--gray-border); z-index: 0;
 }
 .step-node:last-child::after { display: none; }
-.step-node.completed::after { background: #00B42A; } /* 完成变为绿色 */
+.step-node.completed::after { background: #00B42A; } 
 
 /* 节点图标 */
 .step-icon-wrapper {
@@ -269,20 +326,15 @@ body {
     display: flex; align-items: center; justify-content: center;
     font-size: 14px; font-weight: 700; color: var(--gray-sub); transition: all 0.3s;
 }
-
-/* 节点状态颜色 */
 .step-node:hover .step-icon-wrapper { transform: scale(1.1); }
-/* 已完成 */
 .step-node.completed .step-icon-wrapper {
     border-color: #00B42A; background: #00B42A; color: #FFFFFF;
     box-shadow: 0 2px 8px rgba(0, 180, 42, 0.3);
 }
-/* 进行中 */
 .step-node.selected .step-icon-wrapper {
     border-color: #1664FF; background: #1664FF; color: #FFFFFF;
     box-shadow: 0 0 0 6px rgba(22, 100, 255, 0.25); transform: scale(1.15);
 }
-/* 文本颜色 */
 .step-node.completed .step-title { color: #00B42A; }
 .step-node.selected .step-title { color: #1664FF; }
 
@@ -291,19 +343,10 @@ body {
 
 /* 详情面板 */
 .stage-detail-panel {
-    background: #FAFAFA; 
-    border-radius: 8px;
-    padding: 24px; 
-    
-    /* ------------- 修改这里 ------------- */
-    /* 原代码可能只有: margin-top: 24px; */
-    
-    /* 修改为：上下保持24px，左右增加40px的间距 */
+    background: #FAFAFA; border-radius: 8px; padding: 24px;
+    /* 上下24px，左右40px间距 */
     margin: 24px 40px; 
-    /* ---------------------------------- */
-
-    position: relative;
-    border: 1px solid var(--gray-border);
+    position: relative; border: 1px solid var(--gray-border);
     animation: slideDown 0.3s ease-out;
 }
 @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
@@ -316,14 +359,7 @@ body {
 }
 .detail-close-btn:hover { background: rgba(0,0,0,0.05); color: var(--gray-title); }
 
-.detail-container { 
-    display: grid; 
-    grid-template-columns: 280px 1fr; 
-    
-    /* ------------- 修改这里 ------------- */
-    gap: 48px; /* 原来是 32px，调大可以让左右分得更开 */
-    /* ---------------------------------- */
-}
+.detail-container { display: grid; grid-template-columns: 280px 1fr; gap: 48px; }
 .detail-left { display: flex; flex-direction: column; }
 .detail-subtitle { font-size: 13px; font-weight: 600; color: var(--gray-text); margin: 0 0 16px 0; }
 .metrics-grid-blocks { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -336,19 +372,14 @@ body {
 }
 .metric-square:hover { border-color: var(--primary-6); transform: translateY(-2px); }
 .ms-icon { font-size: 20px; margin-bottom: 8px; opacity: 0.9; }
-
-/* 方块数值字体调小，防止换行 */
 .ms-val {
-    font-size: 14px; /* 从18px调小 */
-    font-weight: 700; color: var(--gray-title); font-family: 'Inter', sans-serif;
-    line-height: 1.2; text-align: center; word-break: break-all;
+    font-size: 14px; font-weight: 700; color: var(--gray-title);
+    font-family: 'Inter', sans-serif; line-height: 1.2; text-align: center; word-break: break-all;
 }
 .ms-label { font-size: 12px; color: var(--gray-sub); margin-top: 4px; }
 
 .detail-right { border-left: 1px solid var(--gray-border); padding-left: 32px; }
-.task-list-single-col {
-    list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;
-}
+.task-list-single-col { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
 .task-row {
     background: var(--white); padding: 12px 20px; border-radius: 6px;
     display: flex; justify-content: space-between; align-items: center;
@@ -364,7 +395,7 @@ body {
 .task-row.pending .task-icon, .task-row.pending .task-status { color: var(--gray-sub); }
 
 /* =========================================
-   8. Dashboard Grid (Row 5)
+   7. Dashboard Grid (Row 4)
    ========================================= */
 .dashboard-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
 .card-header.small {
@@ -373,7 +404,7 @@ body {
 }
 .card-header.small .card-title { font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* 链接图标：恢复为方形图标按钮 */
+/* 链接图标：方形图标按钮 */
 .link-icon {
     width: 28px; height: 28px; border-radius: 4px; background: var(--gray-bg);
     display: flex; align-items: center; justify-content: center;
@@ -382,7 +413,6 @@ body {
 }
 .link-icon:hover { background: var(--primary-light); color: var(--primary-6); }
 
-/* 统一图表容器高度 */
 .chart-box { height: 160px; width: 100%; }
 
 .kpi-footer {
@@ -394,20 +424,44 @@ body {
 .label { font-size: 12px; color: var(--gray-sub); }
 .val { font-size: 18px; font-weight: 700; color: var(--gray-title); font-family: 'Inter'; }
 
-.issue-container { display: flex; height: 160px; align-items: center; } /* 高度对齐图表 */
+.issue-container { display: flex; height: 160px; align-items: center; }
 .issue-box { flex: 1; text-align: center; }
 .issue-val { font-size: 32px; font-weight: 700; line-height: 1; margin-bottom: 8px; font-family: 'Inter'; }
 .issue-lbl { font-size: 12px; color: var(--gray-sub); }
 .issue-divider { width: 1px; height: 50px; background: var(--gray-border); }
 
 /* =========================================
+   8. Animations
+   ========================================= */
+@keyframes pulse-blue {
+    0% { box-shadow: 0 0 0 0 rgba(22, 100, 255, 0.4); }
+    70% { box-shadow: 0 0 0 8px rgba(22, 100, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(22, 100, 255, 0); }
+}
+
+/* 应用动画到当前进行的节点图标 */
+.step-node.current-process .step-icon-wrapper {
+    background: #1664FF;
+    color: #fff;
+    border-color: #1664FF;
+    animation: pulse-blue 2s infinite; 
+}
+.step-node.current-process .step-title {
+    color: #1664FF;
+}
+
+/* =========================================
    9. Responsive
    ========================================= */
 @media (max-width: 1200px) {
-    .metrics-container { grid-template-columns: 1fr; }
-    .metric-stats { padding-top: 20px; border-top: 1px solid var(--gray-border); border-left: none; padding-right: 0;}
-    .stat-item { border-right: none; padding: 0; margin-bottom: 10px; align-items: flex-start; }
-    .quick-actions { padding-left: 0; border-left: none; margin-top: 10px; }
+    .hero-metrics-row { flex-wrap: wrap; }
+    .vertical-divider { display: none; }
+    .stats-block {
+        margin-top: 20px; width: 100%; justify-content: space-between;
+        border-top: 1px dashed #E5E6EB; padding-top: 20px;
+    }
+    .actions-block { margin-top: 20px; width: 100%; justify-content: flex-end; }
+    
     .detail-container { grid-template-columns: 1fr; }
     .detail-right { border-left: none; border-top: 1px solid var(--gray-border); padding-left: 0; padding-top: 20px; }
     .dashboard-grid { grid-template-columns: repeat(2, 1fr); }
@@ -421,41 +475,3 @@ body {
     .step-node:last-child::after { display: none; }
     .dashboard-grid { grid-template-columns: 1fr; }
 }
-
-@keyframes pulse-blue {
-    0% {
-        box-shadow: 0 0 0 0 rgba(22, 100, 255, 0.4);
-    }
-    70% {
-        box-shadow: 0 0 0 8px rgba(22, 100, 255, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(22, 100, 255, 0);
-    }
-}
-
-/* 应用动画到当前进行的节点图标 */
-.step-node.current-process .step-icon-wrapper {
-    background: #1664FF;
-    color: #fff;
-    border-color: #1664FF;
-    animation: pulse-blue 2s infinite; /* 2秒循环一次 */
-}
-/* 确保文字颜色也是蓝色 */
-.step-node.current-process .step-title {
-    color: #1664FF;
-}
-
-/* --- 需求 2 配套样式：项目负责人标签 --- */
-.leader-tag {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    color: var(--gray-title);
-    background: #F2F3F5;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-weight: 500;
-}
-.leader-tag i { color: var(--gray-sub); }

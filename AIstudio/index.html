@@ -7,7 +7,7 @@
     <!-- 图标库 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- 字体 -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
     <!-- 样式 -->
     <link rel="stylesheet" href="style.css">
     <!-- ECharts -->
@@ -42,29 +42,83 @@
 
 <div class="layout-container">
 
-    <!-- 1. 项目标题栏 -->
-    <div class="header-row arco-card">
-        <div class="header-left">
-            <h1 class="sys-name" id="pName">加载中...</h1>
-            <div class="tag-group">
-                <span class="arco-tag tag-blue"><i class="fas fa-circle-notch fa-spin"></i> 执行中</span>
-                <span class="arco-tag tag-gray" id="pCode">--</span>
-                
-                <!-- 新增：项目负责人显示 -->
-                <span class="leader-tag">
-                    <i class="fas fa-user-tie"></i> 
-                    负责人：<span id="pLeader">--</span>
+    <!-- 1. 项目全景概览卡片 (合并了原来的标题和指标区) -->
+    <div class="arco-card hero-overview-card">
+        
+        <!-- 上半部分：项目身份信息 -->
+        <div class="hero-header-row">
+            <div class="hero-left">
+                <div class="title-area">
+                    <h1 class="sys-name" id="pName">加载中...</h1>
+                    <span class="arco-tag tag-blue"><i class="fas fa-circle-notch fa-spin"></i> 执行中</span>
+                </div>
+                <div class="meta-area">
+                    <span class="meta-item code-tag" id="pCode">--</span>
+                    <span class="meta-item"><i class="fas fa-user-circle"></i> 负责人：<span id="pLeader">--</span></span>
+                </div>
+            </div>
+            <div class="hero-right">
+                <span class="refresh-time">
+                    <i class="fas fa-sync-alt"></i> 数据更新于：<span id="updateTime">--</span>
                 </span>
             </div>
         </div>
-        <div class="header-right">
-            <span class="refresh-time">
-                <i class="fas fa-sync-alt"></i> 更新于 <span id="updateTime">--</span>
-            </span>
+
+        <!-- 分割线 -->
+        <div class="hero-divider"></div>
+
+        <!-- 下半部分：核心指标看板 -->
+        <div class="hero-metrics-row">
+            
+            <!-- 健康度 (左侧核心) -->
+            <div class="metric-block health-block">
+                <div id="healthGauge" class="gauge-chart-small"></div>
+                <div class="health-text-compact">
+                    <div class="health-value-row">
+                        <span class="main-score" id="healthScoreDisplay">--</span>
+                        <!-- 高危标记 (JS控制显示) -->
+                        <div id="healthStatusTag" class="health-status-badge" style="display:none;">高危</div>
+                    </div>
+                    <div class="sub-label">项目健康度</div>
+                </div>
+            </div>
+
+            <!-- 竖线分隔 -->
+            <div class="vertical-divider"></div>
+
+            <!-- 关键统计 (中间) -->
+            <div class="metric-block stats-block">
+                <div class="stat-unit">
+                    <div class="stat-val text-error" id="delayDays">0</div>
+                    <div class="stat-lbl">延期天数</div>
+                </div>
+                <div class="stat-unit">
+                    <div class="stat-val text-warning" id="highRiskCount">0</div>
+                    <div class="stat-lbl">高风险项</div>
+                </div>
+                <div class="stat-unit">
+                    <div class="stat-val text-primary" id="fundRate">0%</div>
+                    <div class="stat-lbl">资金使用率</div>
+                </div>
+            </div>
+
+            <!-- 竖线分隔 -->
+            <div class="vertical-divider"></div>
+
+            <!-- 操作按钮 (右侧) -->
+            <div class="metric-block actions-block">
+                <button class="arco-btn blue-btn" onclick="alert('跳转项目档案')">
+                    <i class="fas fa-folder-open"></i> 项目档案
+                </button>
+                <button class="arco-btn blue-btn" onclick="alert('跳转督办历史')">
+                    <i class="fas fa-history"></i> 督办历史
+                </button>
+            </div>
+
         </div>
     </div>
 
-    <!-- 2. 警报横幅 -->
+    <!-- 2. 警报横幅 (紧贴概览卡下方) -->
     <div class="alert-row" id="alertBanner" style="display:none;">
         <div class="arco-alert">
             <div class="alert-icon-box"><i class="fas fa-bell"></i></div>
@@ -76,47 +130,7 @@
         </div>
     </div>
 
-    <!-- 3. 核心指标区 -->
-    <div class="metrics-container">
-        <!-- 左侧：健康分 -->
-        <div class="arco-card metric-main">
-            <div class="metric-content">
-                <div id="healthGauge" class="gauge-chart"></div>
-                <div class="health-text">
-                    <div class="health-val-group">
-                        <div class="health-val" id="healthScoreDisplay">--</div>
-                        <div id="healthStatusTag" class="health-status-badge" style="display:none;">高危</div>
-                    </div>
-                    <div class="health-label">
-                        项目健康度 <i class="fas fa-info-circle" style="color:#ccc"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 右侧：统计数据 -->
-        <div class="arco-card metric-stats">
-            <div class="stat-item">
-                <div class="stat-value text-error" id="delayDays">0</div>
-                <div class="stat-label">延期天数</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value text-warning" id="highRiskCount">0</div>
-                <div class="stat-label">高风险项</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value text-primary" id="fundRate">0%</div>
-                <div class="stat-label">资金使用率</div>
-            </div>
-            <!-- 快捷入口 -->
-            <div class="quick-actions">
-                <button class="arco-btn blue-btn" onclick="alert('跳转项目档案')"><i class="fas fa-download"></i> 项目档案</button>
-                <button class="arco-btn blue-btn" onclick="alert('跳转督办历史')"><i class="fas fa-history"></i> 督办历史</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 4. 全生命周期监管 (透明无边框) -->
+    <!-- 3. 全生命周期监管 (白色背景无边框) -->
     <section class="lifecycle-section">
         <div class="card-header no-border">
             <div class="card-title">
@@ -147,7 +161,7 @@
         </div>
     </section>
 
-    <!-- 5. 底部仪表盘 -->
+    <!-- 4. 底部仪表盘 -->
     <div class="dashboard-grid">
         
         <!-- 进度 -->
@@ -188,7 +202,7 @@
             </div>
         </div>
 
-        <!-- 风险 (环形图) -->
+        <!-- 风险 (环形图+图例) -->
         <div class="arco-card chart-card">
             <div class="card-header small">
                 <div class="card-title">风险管控</div>

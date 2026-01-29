@@ -193,9 +193,15 @@ function renderHealthGauge(score) {
             pointer: { show: false },
             progress: { 
                 show: true, overlap: false, roundCap: true, 
-                itemStyle: { color: color }, width: 8 
+                itemStyle: { color: color }, 
+                width: 6 // 修改：线条宽度从 8 改为 6，更精致
             },
-            axisLine: { lineStyle: { width: 8, color: [[1, '#E5E6EB']] } },
+            axisLine: { 
+                lineStyle: { 
+                    width: 6, // 修改：线条宽度从 8 改为 6
+                    color: [[1, '#E5E6EB']] 
+                } 
+            },
             splitLine: { show: false }, axisTick: { show: false }, axisLabel: { show: false }, detail: { show: false },
             data: [{ value: score }]
         }]
