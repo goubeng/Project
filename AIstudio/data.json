@@ -1,0 +1,74 @@
+{
+  "project_name": "新疆自治区一体化在线政务服务平台",
+  "project_code": "GOV-2026-001",
+  "current_stage_index": 2, 
+  "health_score": 58,
+  "health_status": "red",
+  "health_trend": -5, 
+  "update_time": "2026-01-29 14:30",
+
+  "team": { "leader": "王局长", "manager": "张三", "vendor": "某某数字科技" },
+
+  "stages": [
+    {
+      "name": "立项与决策",
+      "status": "completed",
+      "metrics": { "duration": "45天", "docs_count": 8, "approval_rate": "100%", "risk_count": 0 },
+      "sub_tasks": [
+        {"name": "项目建议书申报", "status": "done"},
+        {"name": "可行性研究报告", "status": "done"},
+        {"name": "专家评审会", "status": "done"},
+        {"name": "财政资金批复", "status": "done"}
+      ]
+    },
+    {
+      "name": "启动与规划",
+      "status": "completed",
+      "metrics": { "duration": "20天", "docs_count": 12, "budget_check": "正常", "risk_count": 1 },
+      "sub_tasks": [
+        {"name": "招投标完成", "status": "done"},
+        {"name": "合同签订", "status": "done"},
+        {"name": "项目启动会", "status": "done"},
+        {"name": "详细计划评审", "status": "done"}
+      ]
+    },
+    {
+      "name": "执行与控制",
+      "status": "current",
+      "metrics": { "duration": "进行中(已延期)", "docs_count": 45, "risk_count": 6, "change_count": 3 },
+      "sub_tasks": [
+        {"name": "需求分析确认", "status": "done"},
+        {"name": "系统架构设计", "status": "done"},
+        {"name": "核心功能开发", "status": "delay"},
+        {"name": "中期阶段汇报", "status": "pending"},
+        {"name": "数据迁移方案", "status": "pending"}
+      ]
+    },
+    {
+      "name": "收尾与验收",
+      "status": "pending",
+      "metrics": { "duration": "预计30天", "docs_count": 0, "bug_count": 0, "pass_rate": "--" },
+      "sub_tasks": [
+        {"name": "用户测试(UAT)", "status": "pending"},
+        {"name": "竣工验收申请", "status": "pending"},
+        {"name": "第三方审计", "status": "pending"},
+        {"name": "安全等保测评", "status": "pending"}
+      ]
+    },
+    {
+      "name": "后评估",
+      "status": "pending",
+      "metrics": { "duration": "预计15天", "satisfaction": "--", "ops_cost": "--" },
+      "sub_tasks": [
+        {"name": "运维移交", "status": "pending"},
+        {"name": "绩效自评", "status": "pending"},
+        {"name": "项目归档", "status": "pending"}
+      ]
+    }
+  ],
+
+  "progress": {"plan":85, "actual":60, "gap": -25},
+  "fund": {"total": 1200, "used": 1026, "rate": 85.5},
+  "risk": {"high": 2, "medium": 4, "low": 6, "total": 12},
+  "issues": {"open": 5, "major": 2}
+}

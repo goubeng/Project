@@ -1,0 +1,127 @@
+:root {
+    --primary: #1890ff;
+    --success: #52c41a;
+    --warning: #faad14;
+    --danger: #f5222d;
+    --bg: #f0f2f5;
+    --card-bg: #ffffff;
+}
+
+body { margin: 0; padding: 20px; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #333; }
+.container { max-width: 1200px; margin: 0 auto; }
+
+/* 1. Hero Header (仪表盘风格) */
+.hero-header {
+    display: flex; justify-content: space-between; align-items: center;
+    background: #fff; padding: 20px 40px; border-radius: 12px; margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08); position: relative; overflow: hidden;
+}
+/* 增加顶部装饰条 */
+.hero-header::before { content:''; position: absolute; top:0; left:0; width:100%; height:4px; background: linear-gradient(90deg, var(--primary), var(--success)); }
+
+.hero-left { flex: 1; }
+.project-title { font-size: 24px; font-weight: 800; margin-bottom: 10px; color: #1f1f1f; }
+.project-meta { display: flex; gap: 10px; margin-bottom: 8px; }
+.pill-gray { background: #f5f5f5; color: #666; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
+.pill-blue { background: #e6f7ff; color: #1890ff; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
+.update-time { font-size: 12px; color: #999; }
+
+.hero-center { flex: 1; display: flex; justify-content: center; position: relative; }
+.health-status-label {
+    position: absolute; bottom: 20px; font-weight: bold; font-size: 16px; 
+    padding: 4px 12px; border-radius: 20px; background: #eee;
+}
+.health-status-label.green { color: var(--success); background: #f6ffed; border: 1px solid #b7eb8f; }
+.health-status-label.red { color: var(--danger); background: #fff1f0; border: 1px solid #ffa39e; }
+
+.hero-right { flex: 1; display: flex; justify-content: flex-end; gap: 20px; align-items: center; }
+.stat-box { text-align: center; }
+.stat-box .val { font-size: 28px; font-weight: bold; line-height: 1; }
+.stat-box .val.red { color: var(--danger); }
+.stat-box .lbl { font-size: 12px; color: #999; margin-top: 4px; }
+.btn-detail {
+    background: transparent; border: 1px solid #d9d9d9; padding: 8px 16px; 
+    border-radius: 18px; cursor: pointer; color: #666; font-size: 13px; transition: 0.3s;
+}
+.btn-detail:hover { color: var(--primary); border-color: var(--primary); }
+
+/* 2. Lifecycle Track (重点交互区) */
+.section-card { background: #fff; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); position: relative; }
+.card-head { display: flex; justify-content: space-between; margin-bottom: 25px; font-weight: bold; font-size: 16px; border-left: 4px solid var(--primary); padding-left: 10px; }
+.hint { font-size: 12px; font-weight: normal; color: #999; }
+
+.lifecycle-track { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; }
+.stage-node { 
+    display: flex; flex-direction: column; align-items: center; cursor: pointer; 
+    position: relative; z-index: 2; transition: all 0.2s; 
+}
+.stage-node:hover { transform: translateY(-3px); }
+.node-icon { 
+    width: 36px; height: 36px; border-radius: 50%; background: #eee; color: #999; 
+    display: flex; justify-content: center; align-items: center; font-weight: bold; margin-bottom: 8px; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.node-label { font-size: 13px; color: #666; font-weight: 500; }
+
+/* 状态样式 */
+.stage-node.completed .node-icon { background: var(--success); color: #fff; border-color: var(--success); }
+.stage-node.current .node-icon { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(24,144,255,0.2); }
+.stage-node.selected .node-label { color: var(--primary); font-weight: bold; }
+.stage-line { flex: 1; height: 3px; background: #f0f0f0; margin: 0 10px; position: relative; top: -14px; z-index: 1; }
+.stage-line.active { background: var(--success); }
+
+/* 3. Stage Detail Panel (浮动窗) */
+.stage-detail-panel {
+    margin-top: 15px; background: #f9fbfd; border: 1px solid #e1e4e8; border-radius: 8px; padding: 20px;
+    animation: fadeIn 0.3s ease; position: relative;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+.arrow-up { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 8px solid #e1e4e8; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); }
+
+.detail-header { display: flex; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }
+.detail-header h3 { margin: 0; font-size: 16px; }
+.modal-status { margin-left: 10px; font-size: 12px; padding: 2px 8px; border-radius: 4px; }
+.modal-status.current { background: #e6f7ff; color: var(--primary); }
+.close-btn { margin-left: auto; border: none; background: none; font-size: 20px; cursor: pointer; color: #999; }
+
+.detail-body { display: flex; gap: 30px; }
+.metrics-row { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.metric-item { background: #fff; padding: 10px; border-radius: 6px; text-align: center; border: 1px solid #eee; }
+.m-lbl { font-size: 12px; color: #999; }
+.m-val { font-size: 14px; font-weight: bold; color: #333; margin-top: 4px; }
+
+.subtasks-list { flex: 1; }
+.subtasks-list h4 { margin: 0 0 10px 0; font-size: 13px; color: #666; }
+.subtasks-list ul { list-style: none; padding: 0; margin: 0; }
+.subtasks-list li { font-size: 13px; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+.green { color: var(--success); } .red { color: var(--danger); }
+
+.detail-footer { margin-top: 15px; padding-top: 10px; border-top: 1px dashed #eee; display: flex; gap: 15px; font-size: 13px; }
+.detail-footer a { color: var(--primary); text-decoration: none; display: flex; align-items: center; }
+.detail-footer a:hover { text-decoration: underline; }
+
+/* 4. Grid Dashboard */
+.grid-dashboard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.kpi-card { background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); min-height: 180px; display: flex; flex-direction: column; }
+.kpi-head { font-size: 14px; font-weight: bold; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; color: #333; }
+.action-icon { color: #ccc; cursor: pointer; transition: 0.2s; }
+.action-icon:hover { color: var(--primary); transform: scale(1.1); }
+
+.chart-box { flex: 1; min-height: 100px; width: 100%; }
+.kpi-footer { font-size: 12px; color: #999; text-align: center; border-top: 1px solid #f5f5f5; padding-top: 5px; }
+
+.risk-big-num { font-size: 48px; color: var(--danger); text-align: center; font-weight: bold; flex: 1; display: flex; align-items: center; justify-content: center; }
+.risk-desc { font-size: 12px; color: #666; text-align: center; margin-bottom: 10px; cursor: pointer; text-decoration: underline; }
+
+.supervision { background: linear-gradient(135deg, #1890ff, #0050b3); color: #fff; }
+.supervision .kpi-head.white { color: #fff; }
+.supervision .action-icon { color: rgba(255,255,255,0.6); }
+.supervision .action-icon:hover { color: #fff; }
+.supervision-body { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+.pending-badge { background: rgba(0,0,0,0.2); padding: 5px 15px; border-radius: 20px; margin-bottom: 10px; font-weight: bold; }
+
+@media (max-width: 900px) {
+    .grid-dashboard { grid-template-columns: 1fr 1fr; }
+    .hero-header { flex-direction: column; text-align: center; }
+    .hero-right { justify-content: center; margin-top: 15px; width: 100%; }
+    .detail-body { flex-direction: column; }
+}

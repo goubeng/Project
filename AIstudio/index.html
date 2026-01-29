@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目全过程智能监管驾驶舱</title>
+    <!-- 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- 样式 -->
+    <link rel="stylesheet" href="style.css">
+    <!-- ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+</head>
+<body>
+
+<!-- 顶部全局导航栏 -->
+<nav class="global-navbar">
+    <div class="nav-branding">
+        <span class="org-name">新疆维吾尔自治区数字化发展局</span>
+        <span class="sys-name-sub">项目监管系统</span>
+    </div>
+    
+    <div class="nav-menu">
+        <a href="#" class="nav-item">首页</a>
+        <a href="#" class="nav-item active">驾驶舱</a>
+        <a href="#" class="nav-item">全局搜索</a>
+        <a href="#" class="nav-item">系统管理</a>
+    </div>
+    
+    <div class="nav-actions">
+        <button class="nav-icon-btn" title="统计"><i class="fas fa-chart-bar"></i></button>
+        <button class="nav-icon-btn" title="通知"><i class="fas fa-bell"></i></button>
+        <button class="nav-icon-btn" title="设置"><i class="fas fa-cog"></i></button>
+        <div class="user-profile">
+            <div class="user-avatar"><i class="fas fa-user"></i></div>
+            <span class="user-name">张三</span>
+        </div>
+    </div>
+</nav>
+
+<div class="layout-container">
+
+    <!-- 1. 项目标题栏 -->
+    <div class="header-row arco-card">
+        <div class="header-left">
+            <h1 class="sys-name" id="pName">加载中...</h1>
+            <div class="tag-group">
+                <span class="arco-tag tag-blue"><i class="fas fa-circle-notch fa-spin"></i> 执行中</span>
+                <span class="arco-tag tag-gray" id="pCode">--</span>
+                
+                <!-- 新增：项目负责人显示 -->
+                <span class="leader-tag">
+                    <i class="fas fa-user-tie"></i> 
+                    负责人：<span id="pLeader">--</span>
+                </span>
+            </div>
+        </div>
+        <div class="header-right">
+            <span class="refresh-time">
+                <i class="fas fa-sync-alt"></i> 更新于 <span id="updateTime">--</span>
+            </span>
+        </div>
+    </div>
+
+    <!-- 2. 警报横幅 -->
+    <div class="alert-row" id="alertBanner" style="display:none;">
+        <div class="arco-alert">
+            <div class="alert-icon-box"><i class="fas fa-bell"></i></div>
+            <div class="alert-content">
+                <strong class="alert-title">重点关注</strong>
+                <span class="alert-desc" id="alertDesc">--</span>
+            </div>
+            <button class="alert-close-btn" onclick="this.parentElement.parentElement.style.display='none'"><i class="fas fa-times"></i></button>
+        </div>
+    </div>
+
+    <!-- 3. 核心指标区 -->
+    <div class="metrics-container">
+        <!-- 左侧：健康分 -->
+        <div class="arco-card metric-main">
+            <div class="metric-content">
+                <div id="healthGauge" class="gauge-chart"></div>
+                <div class="health-text">
+                    <div class="health-val-group">
+                        <div class="health-val" id="healthScoreDisplay">--</div>
+                        <div id="healthStatusTag" class="health-status-badge" style="display:none;">高危</div>
+                    </div>
+                    <div class="health-label">
+                        项目健康度 <i class="fas fa-info-circle" style="color:#ccc"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右侧：统计数据 -->
+        <div class="arco-card metric-stats">
+            <div class="stat-item">
+                <div class="stat-value text-error" id="delayDays">0</div>
+                <div class="stat-label">延期天数</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value text-warning" id="highRiskCount">0</div>
+                <div class="stat-label">高风险项</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value text-primary" id="fundRate">0%</div>
+                <div class="stat-label">资金使用率</div>
+            </div>
+            <!-- 快捷入口 -->
+            <div class="quick-actions">
+                <button class="arco-btn blue-btn" onclick="alert('跳转项目档案')"><i class="fas fa-download"></i> 项目档案</button>
+                <button class="arco-btn blue-btn" onclick="alert('跳转督办历史')"><i class="fas fa-history"></i> 督办历史</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. 全生命周期监管 (透明无边框) -->
+    <section class="lifecycle-section">
+        <div class="card-header no-border">
+            <div class="card-title">
+                <span class="title-decoration"></span>
+                全生命周期监管
+            </div>
+            <div class="header-hint">
+                <i class="far fa-hand-pointer"></i> 点击节点查看执行清单
+            </div>
+        </div>
+        
+        <!-- 时间轴 -->
+        <div class="lifecycle-steps" id="lifecycleSteps"></div>
+
+        <!-- 详情面板 -->
+        <div id="stageDetailPanel" class="stage-detail-panel" style="display:none;">
+            <button class="detail-close-btn" onclick="closeDetailPanel()"><i class="fas fa-times"></i></button>
+            <div class="detail-container">
+                <div class="detail-left">
+                    <h4 class="detail-subtitle">阶段核心指标</h4>
+                    <div class="metrics-grid-blocks" id="detailMetrics"></div>
+                </div>
+                <div class="detail-right">
+                    <h4 class="detail-subtitle">执行清单与状态</h4>
+                    <ul class="task-list-single-col" id="detailTaskList"></ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. 底部仪表盘 -->
+    <div class="dashboard-grid">
+        
+        <!-- 进度 -->
+        <div class="arco-card chart-card">
+            <div class="card-header small">
+                <div class="card-title">总体进度</div>
+                <a href="#" class="link-icon" title="查看甘特图"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+            <div id="chartProgress" class="chart-box"></div>
+            <div class="kpi-footer">
+                <div class="kpi-unit">
+                    <span class="label">计划</span>
+                    <span class="val" id="planProgress">0%</span>
+                </div>
+                <div class="kpi-unit">
+                    <span class="label">实际</span>
+                    <span class="val text-primary" id="actualProgress">0%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 资金 -->
+        <div class="arco-card chart-card">
+            <div class="card-header small">
+                <div class="card-title">资金支付</div>
+                <a href="#" class="link-icon" title="查看资金台账"><i class="fas fa-file-invoice-dollar"></i></a>
+            </div>
+            <div id="chartFund" class="chart-box"></div>
+            <div class="kpi-footer">
+                <div class="kpi-unit">
+                    <span class="label">总预算</span>
+                    <span class="val" id="totalFund">0</span>
+                </div>
+                <div class="kpi-unit">
+                    <span class="label">剩余</span>
+                    <span class="val text-success" id="remainFund">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 风险 (环形图) -->
+        <div class="arco-card chart-card">
+            <div class="card-header small">
+                <div class="card-title">风险管控</div>
+                <a href="#" class="link-icon" title="查看风险台账"><i class="fas fa-shield-alt"></i></a>
+            </div>
+            <div id="chartRisk" class="chart-box"></div>
+            <div class="kpi-footer">
+                <div class="kpi-unit full-width">
+                    <span class="label">当前风险总数</span>
+                    <span class="val" id="riskTotal">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 问题 -->
+        <div class="arco-card chart-card">
+            <div class="card-header small">
+                <div class="card-title">问题与变更</div>
+                <a href="#" class="link-icon" title="查看问题清单"><i class="fas fa-list-ul"></i></a>
+            </div>
+            <div class="issue-container">
+                <div class="issue-box">
+                    <div class="issue-val text-error" id="majorIssues">0</div>
+                    <div class="issue-lbl">重大问题</div>
+                </div>
+                <div class="issue-divider"></div>
+                <div class="issue-box">
+                    <div class="issue-val text-primary" id="openIssues">0</div>
+                    <div class="issue-lbl">待解决</div>
+                </div>
+            </div>
+            <div class="kpi-footer">
+                <div class="kpi-unit">
+                    <span class="label">本周新增</span>
+                    <span class="val">2</span>
+                </div>
+                <div class="kpi-unit">
+                    <span class="label">已解决</span>
+                    <span class="val text-success">1</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

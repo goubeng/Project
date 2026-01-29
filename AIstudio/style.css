@@ -1,0 +1,461 @@
+/* =========================================
+   1. Design Tokens (Volcengine / Arco Design)
+   ========================================= */
+   :root {
+    /* 核心品牌色：蓝紫渐变 */
+    --primary-6: #1664FF;
+    --primary-gradient: linear-gradient(135deg, #1664FF 0%, #722ED1 100%);
+    --primary-light: #E8F3FF;
+
+    /* 辅助色 */
+    --success-6: #00B42A;
+    --success-bg: #E8FFEA;
+    --warning-6: #FF7D00;
+    --warning-bg: #FFF7E8;
+    --error-6: #F53F3F;
+    --error-bg: #FFECE8;
+    
+    /* 灰度系统 */
+    --gray-title: #1D2129;
+    --gray-text: #4E5969;
+    --gray-sub: #86909C;
+    --gray-border: #E5E6EB;
+    --gray-bg: #F5F6F7;
+    
+    --white: #FFFFFF;
+    --radius: 8px;
+    --shadow-s: 0 4px 10px rgba(0, 0, 0, 0.04);
+    --shadow-m: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* =========================================
+   2. Global Layout & Navbar
+   ========================================= */
+html, body {
+    width: 100%;
+    overflow-x: hidden; /* 强制禁止横向滚动 */
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', 'Noto Sans SC', sans-serif;
+    background: var(--gray-bg);
+    color: var(--gray-text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* 全局顶部导航栏 */
+.global-navbar {
+    width: 100%;
+    height: 60px;
+    background-color: #3370FF;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-sizing: border-box;
+}
+
+.nav-branding { display: flex; align-items: center; gap: 12px; }
+.org-name { font-size: 16px; font-weight: 600; letter-spacing: 0.5px; white-space: nowrap; }
+.sys-name-sub { font-size: 14px; opacity: 0.8; padding-left: 12px; border-left: 1px solid rgba(255,255,255,0.3); white-space: nowrap; }
+
+.nav-menu { display: flex; gap: 32px; height: 100%; }
+.nav-item {
+    color: rgba(255,255,255,0.8); text-decoration: none; font-size: 14px;
+    display: flex; align-items: center; height: 100%; padding: 0 4px;
+    border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap;
+}
+.nav-item:hover, .nav-item.active { color: #fff; border-bottom-color: #fff; font-weight: 500; }
+
+.nav-actions { display: flex; align-items: center; gap: 20px; }
+.nav-icon-btn { background: none; border: none; color: #fff; font-size: 16px; cursor: pointer; opacity: 0.8; padding: 0; }
+.nav-icon-btn:hover { opacity: 1; }
+.user-profile { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.user-avatar { width: 24px; height: 24px; background: #E8F3FF; color: #1664FF; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+.user-name { font-size: 12px; opacity: 0.9; white-space: nowrap; }
+
+/* 内容容器 */
+.layout-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-sizing: border-box;
+}
+
+/* =========================================
+   3. Common Components
+   ========================================= */
+.arco-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow-s);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    transition: all 0.3s;
+}
+.arco-card:hover { box-shadow: var(--shadow-m); transform: translateY(-2px); }
+
+.text-primary { color: var(--primary-6); }
+.text-success { color: var(--success-6); }
+.text-warning { color: var(--warning-6); }
+.text-error { color: var(--error-6); }
+
+/* 蓝色实心按钮 */
+.arco-btn.blue-btn {
+    background: var(--primary-6); color: #fff; border: none;
+}
+.arco-btn.blue-btn:hover {
+    background: #3370FF;
+}
+
+.arco-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    height: 32px; padding: 0 16px; font-size: 13px; border-radius: 4px;
+    cursor: pointer; transition: all 0.2s; gap: 6px; font-weight: 500;
+}
+.arco-tag { font-size: 12px; padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+.tag-blue { background: var(--primary-light); color: var(--primary-6); }
+.tag-gray { background: var(--gray-border); color: var(--gray-text); }
+
+/* =========================================
+   4. Project Header (Row 1)
+   ========================================= */
+.header-row.arco-card {
+    background: var(--white);
+    box-shadow: var(--shadow-s);
+    border: 1px solid rgba(0,0,0,0.02);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 0;
+}
+
+.header-row { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 10px; }
+.header-left { display: flex; flex-direction: column; gap: 8px; }
+
+.sys-name { margin: 0; font-size: 22px; font-weight: 700; color: var(--gray-title); display: flex; align-items: center; gap: 12px; flex-wrap: wrap;}
+.tag-group { display: flex; gap: 8px; }
+.refresh-time { font-size: 13px; color: var(--gray-sub); display: flex; align-items: center; gap: 6px; white-space: nowrap;}
+
+/* =========================================
+   5. Alert Banner (Row 2)
+   ========================================= */
+.alert-row { margin-bottom: 0; }
+.arco-alert {
+    background: #FFF0F0; border: 1px solid #FFDCDC;
+    padding: 12px 20px; border-radius: 8px;
+    display: flex; align-items: center; gap: 12px;
+}
+.alert-icon-box { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; color: var(--error-6); font-size: 16px; flex-shrink: 0;}
+.alert-content { flex: 1; display: flex; flex-direction: column; }
+.alert-title {
+    font-size: 14px;
+    color: #F53F3F; /* 原为 var(--gray-title)，改为红色 */
+    font-weight: 700; /* 加粗使其更明显 */
+    margin-bottom: 2px;
+}
+
+.alert-desc { font-size: 13px; color: var(--error-6); opacity: 0.9; }
+.alert-close-btn { background: none; border: none; color: var(--gray-sub); cursor: pointer; font-size: 14px; }
+
+/* =========================================
+   6. Metrics Area (Row 3)
+   ========================================= */
+.metrics-container { display: grid; grid-template-columns: 320px 1fr; gap: 20px; }
+
+.metric-main {
+    background: var(--white);
+    display: flex; align-items: center; justify-content: center;
+}
+.metric-content { display: flex; align-items: center; gap: 24px; }
+.gauge-chart { width: 90px; height: 90px; }
+
+.health-text { text-align: left; }
+.health-val-group { display: flex; align-items: center; gap: 8px; }
+.health-val { font-size: 36px; font-weight: 800; color: var(--gray-title); line-height: 1; letter-spacing: -1px; }
+
+/* 高危标签 */
+.health-status-badge {
+    background: #FFECE8; color: #F53F3F; font-size: 12px; font-weight: 600;
+    padding: 2px 6px; border-radius: 4px; border: 1px solid #FFDCDC;
+    display: inline-block; vertical-align: middle; white-space: nowrap;
+}
+.health-label { font-size: 14px; color: var(--gray-sub); margin-top: 4px; }
+
+.metric-stats { display: flex; align-items: center; justify-content: space-between; padding-right: 24px; flex-wrap: wrap; }
+.stat-item {
+    flex: 1; border-right: 1px solid var(--gray-border); padding: 0 32px;
+    display: flex; flex-direction: column; justify-content: center; min-width: 100px;
+}
+.stat-item:last-of-type { border-right: none; }
+.stat-value { font-size: 28px; font-weight: 700; font-family: 'Inter'; margin-bottom: 4px; }
+.stat-label { font-size: 13px; color: var(--gray-sub); }
+
+.quick-actions { display: flex; gap: 12px; padding-left: 24px; flex-shrink: 0; }
+
+/* =========================================
+   7. Lifecycle Section (Row 4)
+   ========================================= */
+   .lifecycle-section {
+    position: relative;
+    padding-top: 20px; /* 稍微增加顶部内边距 */
+    padding-bottom: 20px; /* 增加底部内边距 */
+    
+    /* 修改这里：将 transparent 改为 white */
+    background: var(--white); 
+    
+    /* 建议：加上圆角和轻微阴影，否则白色方块在灰底上会很生硬 */
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-s);
+
+    /* 保持无边框 */
+    border: none; 
+}
+
+/* 确保头部有一定的内边距 */
+.lifecycle-section .card-header.no-border {
+    border-bottom: none; 
+    margin-bottom: 24px; 
+    padding: 0 24px; /* 增加左右内边距，防止文字贴边 */
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    flex-wrap: nowrap;
+}
+
+.card-title {
+    font-size: 16px; font-weight: 700; color: var(--gray-title);
+    position: relative; display: flex; align-items: center; gap: 8px; white-space: nowrap;
+}
+.title-decoration {
+    display: inline-block; width: 4px; height: 16px;
+    background: var(--primary-6); border-radius: 2px; margin-right: 8px;
+}
+.header-hint {
+    font-size: 12px; color: var(--gray-sub);
+    display: flex; align-items: center; gap: 6px;
+    white-space: nowrap; flex-shrink: 0; margin-left: auto;
+}
+
+/* 进度轴 */
+.lifecycle-steps {
+    display: flex; justify-content: space-between; position: relative;
+    padding: 10px 40px; margin-bottom: 10px;
+}
+.step-node { flex: 1; text-align: center; position: relative; cursor: pointer; }
+
+/* 连接线 */
+.step-node::after {
+    content: ''; position: absolute; top: 18px; left: 50%; width: 100%; height: 3px;
+    background: var(--gray-border); z-index: 0;
+}
+.step-node:last-child::after { display: none; }
+.step-node.completed::after { background: #00B42A; } /* 完成变为绿色 */
+
+/* 节点图标 */
+.step-icon-wrapper {
+    width: 36px; height: 36px; border-radius: 50%; background: var(--white);
+    border: 3px solid var(--gray-border); margin: 0 auto 12px; position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: var(--gray-sub); transition: all 0.3s;
+}
+
+/* 节点状态颜色 */
+.step-node:hover .step-icon-wrapper { transform: scale(1.1); }
+/* 已完成 */
+.step-node.completed .step-icon-wrapper {
+    border-color: #00B42A; background: #00B42A; color: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(0, 180, 42, 0.3);
+}
+/* 进行中 */
+.step-node.selected .step-icon-wrapper {
+    border-color: #1664FF; background: #1664FF; color: #FFFFFF;
+    box-shadow: 0 0 0 6px rgba(22, 100, 255, 0.25); transform: scale(1.15);
+}
+/* 文本颜色 */
+.step-node.completed .step-title { color: #00B42A; }
+.step-node.selected .step-title { color: #1664FF; }
+
+.step-title { font-size: 14px; font-weight: 600; color: var(--gray-title); margin-bottom: 4px; }
+.step-date { font-size: 12px; color: var(--gray-sub); font-family: 'Inter'; }
+
+/* 详情面板 */
+.stage-detail-panel {
+    background: #FAFAFA; 
+    border-radius: 8px;
+    padding: 24px; 
+    
+    /* ------------- 修改这里 ------------- */
+    /* 原代码可能只有: margin-top: 24px; */
+    
+    /* 修改为：上下保持24px，左右增加40px的间距 */
+    margin: 24px 40px; 
+    /* ---------------------------------- */
+
+    position: relative;
+    border: 1px solid var(--gray-border);
+    animation: slideDown 0.3s ease-out;
+}
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+.detail-close-btn {
+    position: absolute; top: 16px; right: 16px;
+    width: 24px; height: 24px; border: none; background: transparent;
+    color: var(--gray-sub); cursor: pointer; display: flex; align-items: center; justify-content: center;
+    border-radius: 4px; transition: 0.2s;
+}
+.detail-close-btn:hover { background: rgba(0,0,0,0.05); color: var(--gray-title); }
+
+.detail-container { 
+    display: grid; 
+    grid-template-columns: 280px 1fr; 
+    
+    /* ------------- 修改这里 ------------- */
+    gap: 48px; /* 原来是 32px，调大可以让左右分得更开 */
+    /* ---------------------------------- */
+}
+.detail-left { display: flex; flex-direction: column; }
+.detail-subtitle { font-size: 13px; font-weight: 600; color: var(--gray-text); margin: 0 0 16px 0; }
+.metrics-grid-blocks { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.metric-square {
+    background: var(--white); padding: 16px 8px; border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid transparent;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transition: 0.2s; min-height: 90px;
+}
+.metric-square:hover { border-color: var(--primary-6); transform: translateY(-2px); }
+.ms-icon { font-size: 20px; margin-bottom: 8px; opacity: 0.9; }
+
+/* 方块数值字体调小，防止换行 */
+.ms-val {
+    font-size: 14px; /* 从18px调小 */
+    font-weight: 700; color: var(--gray-title); font-family: 'Inter', sans-serif;
+    line-height: 1.2; text-align: center; word-break: break-all;
+}
+.ms-label { font-size: 12px; color: var(--gray-sub); margin-top: 4px; }
+
+.detail-right { border-left: 1px solid var(--gray-border); padding-left: 32px; }
+.task-list-single-col {
+    list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;
+}
+.task-row {
+    background: var(--white); padding: 12px 20px; border-radius: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    border: 1px solid transparent; box-shadow: 0 1px 2px rgba(0,0,0,0.02); transition: 0.2s;
+}
+.task-row:hover { background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+.task-info { display: flex; align-items: center; gap: 12px; }
+.task-icon { font-size: 14px; width: 20px; text-align: center; }
+.task-name { font-size: 14px; color: var(--gray-title); }
+.task-status { font-size: 12px; font-weight: 500; }
+.task-row.done .task-icon, .task-row.done .task-status { color: var(--success-6); }
+.task-row.delay .task-icon, .task-row.delay .task-status { color: var(--error-6); }
+.task-row.pending .task-icon, .task-row.pending .task-status { color: var(--gray-sub); }
+
+/* =========================================
+   8. Dashboard Grid (Row 5)
+   ========================================= */
+.dashboard-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.card-header.small {
+    margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--gray-border);
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: nowrap;
+}
+.card-header.small .card-title { font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* 链接图标：恢复为方形图标按钮 */
+.link-icon {
+    width: 28px; height: 28px; border-radius: 4px; background: var(--gray-bg);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gray-sub); font-size: 14px; text-decoration: none;
+    transition: all 0.2s; flex-shrink: 0; padding: 0;
+}
+.link-icon:hover { background: var(--primary-light); color: var(--primary-6); }
+
+/* 统一图表容器高度 */
+.chart-box { height: 160px; width: 100%; }
+
+.kpi-footer {
+    display: flex; justify-content: space-between; margin-top: 12px; padding-top: 12px;
+    border-top: 1px dashed var(--gray-border);
+}
+.kpi-unit { display: flex; flex-direction: column; }
+.kpi-unit.full-width { width: 100%; flex-direction: row; justify-content: space-between; align-items: center; }
+.label { font-size: 12px; color: var(--gray-sub); }
+.val { font-size: 18px; font-weight: 700; color: var(--gray-title); font-family: 'Inter'; }
+
+.issue-container { display: flex; height: 160px; align-items: center; } /* 高度对齐图表 */
+.issue-box { flex: 1; text-align: center; }
+.issue-val { font-size: 32px; font-weight: 700; line-height: 1; margin-bottom: 8px; font-family: 'Inter'; }
+.issue-lbl { font-size: 12px; color: var(--gray-sub); }
+.issue-divider { width: 1px; height: 50px; background: var(--gray-border); }
+
+/* =========================================
+   9. Responsive
+   ========================================= */
+@media (max-width: 1200px) {
+    .metrics-container { grid-template-columns: 1fr; }
+    .metric-stats { padding-top: 20px; border-top: 1px solid var(--gray-border); border-left: none; padding-right: 0;}
+    .stat-item { border-right: none; padding: 0; margin-bottom: 10px; align-items: flex-start; }
+    .quick-actions { padding-left: 0; border-left: none; margin-top: 10px; }
+    .detail-container { grid-template-columns: 1fr; }
+    .detail-right { border-left: none; border-top: 1px solid var(--gray-border); padding-left: 0; padding-top: 20px; }
+    .dashboard-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .global-navbar { padding: 0 12px; }
+    .nav-menu { display: none; }
+    .lifecycle-steps { flex-direction: column; gap: 30px; }
+    .step-node::after { width: 3px; height: 100%; left: 50%; top: 36px; }
+    .step-node:last-child::after { display: none; }
+    .dashboard-grid { grid-template-columns: 1fr; }
+}
+
+@keyframes pulse-blue {
+    0% {
+        box-shadow: 0 0 0 0 rgba(22, 100, 255, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 8px rgba(22, 100, 255, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(22, 100, 255, 0);
+    }
+}
+
+/* 应用动画到当前进行的节点图标 */
+.step-node.current-process .step-icon-wrapper {
+    background: #1664FF;
+    color: #fff;
+    border-color: #1664FF;
+    animation: pulse-blue 2s infinite; /* 2秒循环一次 */
+}
+/* 确保文字颜色也是蓝色 */
+.step-node.current-process .step-title {
+    color: #1664FF;
+}
+
+/* --- 需求 2 配套样式：项目负责人标签 --- */
+.leader-tag {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--gray-title);
+    background: #F2F3F5;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+.leader-tag i { color: var(--gray-sub); }
