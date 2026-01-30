@@ -1,0 +1,401 @@
+{
+  "project_basic": {
+    "project_name": "新疆自治区一体化在线政务服务平台",
+    "project_code": "GOV-2026-001",
+    "current_stage": "执行与控制",
+    "current_stage_index": 2
+  },
+  
+  "project_timeline": {
+    "start_date": "2025-11-01",
+    "plan_end_date": "2026-03-31",
+    "total_days": 151,
+    "elapsed_days": 90,
+    "progress_percent": 60
+  },
+  
+  "update_time": "2026-01-30 14:30",
+  
+  "governance_health": {
+    "health_score": 58,
+    "health_status": "red",
+    "health_trend": -5,
+    "status_light": "red",
+    "need_intervention": true,
+    "red_alert_count": 3,
+    "breakdown": {
+      "risk_safety_score": 0,
+      "quality_stability_score": 12,
+      "accountability_score": 10,
+      "compliance_score": 8,
+      "execution_response_score": 5
+    }
+  },
+  
+  "team": {
+    "leader": "王局长",
+    "manager": "张三",
+    "vendor": "某某数字科技",
+    "contractor": "新疆数字政务建设集团",
+    "collaborators": ["财政厅信息中心", "大数据局"],
+    "key_roles_ready": false
+  },
+  
+  "supervision": {
+    "need_intervention": true,
+    "pending_count": 2,
+    "last_comment": "请加快核心功能开发进度,确保按期完成中期汇报",
+    "last_comment_date": "2026-01-25",
+    "last_comment_by": "李副区长",
+    "supervision_history": [
+      {
+        "supervisor": "李副区长",
+        "date": "2026-01-25",
+        "content": "请加快核心功能开发进度,确保按期完成中期汇报",
+        "status": "pending",
+        "response": null,
+        "closed_date": null
+      },
+      {
+        "supervisor": "王局长",
+        "date": "2026-01-20",
+        "content": "数据迁移方案需要尽快提交专家评审",
+        "status": "pending",
+        "response": "已安排1月28日专家评审会",
+        "closed_date": null
+      }
+    ]
+  },
+  
+  "risk_governance": {
+    "high_risk_count": 2,
+    "medium_risk_count": 4,
+    "low_risk_count": 6,
+    "total_risk_count": 12,
+    "red_warning_count": 3,
+    "overdue_high_risk_count": 1,
+    "risk_closure_rate": 45,
+    "risk_trend": "up",
+    "high_risks": [
+      {
+        "id": "R001",
+        "title": "中期阶段汇报延期",
+        "level": "high",
+        "status": "open",
+        "created_date": "2026-01-20",
+        "plan_close_date": "2026-01-25",
+        "actual_close_date": null,
+        "overdue_days": 4,
+        "owner": "张三",
+        "impact": "影响项目整体进度,可能导致验收延期"
+      },
+      {
+        "id": "R002",
+        "title": "核心功能开发进度滞后",
+        "level": "high",
+        "status": "open",
+        "created_date": "2026-01-15",
+        "plan_close_date": "2026-01-30",
+        "actual_close_date": null,
+        "overdue_days": 0,
+        "owner": "某某数字科技",
+        "impact": "可能影响UAT测试计划"
+      }
+    ],
+    "risk_trend_data": [
+      {"week": "W1", "count": 3},
+      {"week": "W2", "count": 5},
+      {"week": "W3", "count": 6},
+      {"week": "W4", "count": 12}
+    ]
+  },
+  
+  "quality_governance": {
+    "acceptance_pass_rate": 78,
+    "avg_rectification_count": 2.6,
+    "unclosed_quality_issues": 3,
+    "major_quality_issues": 1,
+    "quality_trend": "down",
+    "acceptance_history": [
+      {
+        "stage": "需求确认",
+        "attempt": 1,
+        "result": "passed",
+        "date": "2025-12-20"
+      },
+      {
+        "stage": "架构设计",
+        "attempt": 1,
+        "result": "failed",
+        "date": "2026-01-10"
+      },
+      {
+        "stage": "架构设计",
+        "attempt": 2,
+        "result": "passed",
+        "date": "2026-01-15"
+      }
+    ],
+    "quality_trend_data": [
+      {"week": "W1", "pass_rate": 95},
+      {"week": "W2", "pass_rate": 88},
+      {"week": "W3", "pass_rate": 82},
+      {"week": "W4", "pass_rate": 78}
+    ],
+    "major_issues": [
+      {
+        "id": "Q001",
+        "title": "数据接口性能不达标",
+        "severity": "major",
+        "status": "open",
+        "created_date": "2026-01-22",
+        "owner": "某某数字科技"
+      }
+    ]
+  },
+  
+  "accountability_governance": {
+    "supervision_open_count": 2,
+    "overdue_task_count": 4,
+    "key_role_ready": false,
+    "avg_response_time_hours": 36,
+    "response_timeliness": "slow",
+    "overdue_tasks": [
+      {
+        "id": "T001",
+        "title": "中期汇报材料准备",
+        "owner": "张三",
+        "plan_date": "2026-01-25",
+        "overdue_days": 4,
+        "status": "in_progress"
+      },
+      {
+        "id": "T002",
+        "title": "数据迁移方案评审",
+        "owner": "技术负责人",
+        "plan_date": "2026-01-28",
+        "overdue_days": 1,
+        "status": "pending"
+      }
+    ]
+  },
+  
+  "compliance_governance": {
+    "stage_doc_complete_rate": 85,
+    "acceptance_doc_complete_rate": 78,
+    "approval_trace_rate": 90,
+    "audit_issue_count": 2,
+    "missing_docs": [
+      {
+        "type": "stage_deliverable",
+        "name": "中期验收报告",
+        "required_date": "2026-01-25",
+        "status": "missing"
+      }
+    ],
+    "audit_issues": [
+      {
+        "id": "A001",
+        "title": "部分采购流程资料不完整",
+        "severity": "medium",
+        "status": "rectifying",
+        "found_date": "2026-01-15"
+      },
+      {
+        "id": "A002",
+        "title": "变更审批流程未完全留痕",
+        "severity": "low",
+        "status": "rectifying",
+        "found_date": "2026-01-20"
+      }
+    ]
+  },
+  
+  "exception_insight": {
+    "auto_summary": "因【中期阶段汇报延期4天 + 存在2项高风险未关闭】,项目处于红色状态,建议领导重点关注。",
+    "recent_exceptions": [
+      {
+        "type": "risk",
+        "tag": "风险",
+        "description": "中期阶段汇报延期4天(未关闭)",
+        "date": "2026-01-29",
+        "severity": "high"
+      },
+      {
+        "type": "quality",
+        "tag": "质量",
+        "description": "核心功能开发进度滞后",
+        "date": "2026-01-28",
+        "severity": "high"
+      },
+      {
+        "type": "accountability",
+        "tag": "责任",
+        "description": "督办事项超期未闭环",
+        "date": "2026-01-25",
+        "severity": "medium"
+      }
+    ]
+  },
+  
+  "stages": [
+    {
+      "id": 1,
+      "name": "立项与决策",
+      "status": "completed",
+      "start_date": "2025-08-01",
+      "end_date": "2025-09-15",
+      "duration_days": 45,
+      "metrics": {
+        "duration": "45天",
+        "docs_count": 8,
+        "approval_rate": "100%",
+        "risk_count": 0
+      },
+      "sub_tasks": [
+        {"name": "项目建议书申报", "status": "done"},
+        {"name": "可行性研究报告", "status": "done"},
+        {"name": "专家评审会", "status": "done"},
+        {"name": "财政资金批复", "status": "done"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "启动与规划",
+      "status": "completed",
+      "start_date": "2025-09-16",
+      "end_date": "2025-10-31",
+      "duration_days": 20,
+      "metrics": {
+        "duration": "20天",
+        "docs_count": 12,
+        "budget_check": "正常",
+        "risk_count": 1
+      },
+      "sub_tasks": [
+        {"name": "招投标完成", "status": "done"},
+        {"name": "合同签订", "status": "done"},
+        {"name": "项目启动会", "status": "done"},
+        {"name": "详细计划评审", "status": "done"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "执行与控制",
+      "status": "current",
+      "start_date": "2025-11-01",
+      "end_date": null,
+      "duration_days": null,
+      "metrics": {
+        "duration": "进行中(已延期)",
+        "docs_count": 45,
+        "risk_count": 6,
+        "change_count": 3
+      },
+      "sub_tasks": [
+        {"name": "需求分析确认", "status": "done"},
+        {"name": "系统架构设计", "status": "done"},
+        {"name": "核心功能开发", "status": "delay"},
+        {"name": "中期阶段汇报", "status": "pending"},
+        {"name": "数据迁移方案", "status": "pending"}
+      ]
+    },
+    {
+      "id": 4,
+      "name": "收尾与验收",
+      "status": "pending",
+      "start_date": null,
+      "end_date": null,
+      "duration_days": null,
+      "metrics": {
+        "duration": "预计30天",
+        "docs_count": 0,
+        "bug_count": 0,
+        "pass_rate": "--"
+      },
+      "sub_tasks": [
+        {"name": "用户测试(UAT)", "status": "pending"},
+        {"name": "竣工验收申请", "status": "pending"},
+        {"name": "第三方审计", "status": "pending"},
+        {"name": "安全等保测评", "status": "pending"}
+      ]
+    },
+    {
+      "id": 5,
+      "name": "后评估",
+      "status": "pending",
+      "start_date": null,
+      "end_date": null,
+      "duration_days": null,
+      "metrics": {
+        "duration": "预计15天",
+        "satisfaction": "--",
+        "ops_cost": "--"
+      },
+      "sub_tasks": [
+        {"name": "运维移交", "status": "pending"},
+        {"name": "绩效自评", "status": "pending"},
+        {"name": "项目归档", "status": "pending"}
+      ]
+    }
+  ],
+  
+  "milestones": [
+    {
+      "id": "M001",
+      "name": "需求确认里程碑",
+      "plan_date": "2025-12-15",
+      "actual_date": "2025-12-20",
+      "status": "completed",
+      "delay_days": 5,
+      "risk_level": null
+    },
+    {
+      "id": "M002",
+      "name": "中期阶段汇报",
+      "plan_date": "2026-01-25",
+      "actual_date": null,
+      "status": "delay",
+      "delay_days": 4,
+      "risk_level": "high"
+    },
+    {
+      "id": "M003",
+      "name": "用户测试(UAT)",
+      "plan_date": "2026-02-10",
+      "actual_date": null,
+      "status": "pending",
+      "delay_days": 0,
+      "risk_level": "medium"
+    },
+    {
+      "id": "M004",
+      "name": "竣工验收",
+      "plan_date": "2026-03-01",
+      "actual_date": null,
+      "status": "pending",
+      "delay_days": 0,
+      "risk_level": "high"
+    }
+  ],
+  
+  "progress": {
+    "plan_percent": 85,
+    "actual_percent": 60,
+    "gap_percent": -25
+  },
+  
+  "fund": {
+    "total_budget": 1200,
+    "used_amount": 1026,
+    "remaining_amount": 174,
+    "usage_rate": 85.5
+  },
+  
+  "issues": {
+    "open_count": 5,
+    "major_count": 2,
+    "closed_count": 8,
+    "total_count": 13
+  }
+}
