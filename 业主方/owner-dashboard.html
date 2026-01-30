@@ -4,361 +4,238 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>业主方项目治理驾驶舱</title>
-    <!-- 图标库 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- 字体 -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- 样式 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <link rel="stylesheet" href="owner-style.css">
-    <!-- ECharts -->
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 </head>
 <body>
 
-<!-- 顶部全局导航栏 -->
+<!-- 顶部导航 -->
 <nav class="global-navbar">
     <div class="nav-branding">
         <span class="org-name">新疆维吾尔自治区数字化发展局</span>
-        <span class="sys-name-sub">业主方治理驾驶舱</span>
+        <span class="sys-name-sub">项目监管系统</span>
     </div>
-    
     <div class="nav-menu">
-        <a href="#" class="nav-item active">单项目视图</a>
-        <a href="#" class="nav-item">跨项目对比</a>
-        <a href="#" class="nav-item">审计支撑</a>
+        <a href="#" class="nav-item">首页</a>
+        <a href="#" class="nav-item active">驾驶舱</a>
+        <a href="#" class="nav-item">全局搜索</a>
         <a href="#" class="nav-item">系统管理</a>
     </div>
-    
     <div class="nav-actions">
-        <button class="nav-icon-btn" title="导出报告"><i class="fas fa-file-export"></i></button>
-        <button class="nav-icon-btn" title="通知"><i class="fas fa-bell"></i></button>
-        <button class="nav-icon-btn" title="设置"><i class="fas fa-cog"></i></button>
+        <button class="icon-btn"><i class="fas fa-bell"></i></button>
+        <button class="icon-btn"><i class="fas fa-cog"></i></button>
         <div class="user-profile">
             <div class="user-avatar"><i class="fas fa-user"></i></div>
-            <span class="user-name">王局长</span>
+            <span class="user-name">张三</span>
         </div>
     </div>
 </nav>
 
 <div class="layout-container">
 
-    <!-- 1. 顶部决策条 (Decision Bar) - 3秒判断 -->
-    <div class="decision-bar">
-        <div class="project-identity">
-            <h1 class="project-name" id="projectName">新疆自治区一体化在线政务服务平台</h1>
+    <!-- 2. 顶部项目卡片 (修改：对齐领导端结构，保留重点项目和当前阶段) -->
+    <div class="project-header-card">
+        <div class="header-main">
+            <div class="title-section">
+                <h1 id="pName">加载中...</h1>
+                <span class="status-tag running"><i class="fas fa-circle-notch fa-spin"></i> 执行中</span>
+                <!-- 保留：业主侧特有的重点项目标签 -->
+                <span class="priority-tag high">重点项目</span>
+            </div>
             <div class="meta-row">
-                <span class="meta-item code-tag" id="projectCode">GOV-2026-001</span>
-                <span class="meta-item stage-tag" id="currentStage">执行与控制</span>
-                <span class="meta-item"><i class="fas fa-calendar-alt"></i> <span id="timelineInfo">--</span></span>
+                <span class="meta-tag code-font" id="pCode">--</span>
+                <span class="meta-tag">政府投资</span>
+                <span class="separator">|</span>
+                <span class="meta-info"><i class="far fa-calendar-alt"></i> <span id="projectPeriod">--</span></span>
+                <span class="separator">|</span>
+                <!-- 新增：总工期与已执行 -->
+                <span class="meta-info">总工期: <strong id="totalDays">--</strong>天</span>
+                <span class="separator">|</span>
+                <span class="meta-info">已执行: <strong id="elapsedDays">--</strong>天</span>
+                <span class="separator">|</span>
+                <!-- 保留：当前阶段显示 -->
+                <span class="meta-info">当前阶段: <strong id="currentStageText" style="color:var(--primary)">--</strong></span>
+            </div>
+            <div class="people-row">
+                <!-- 新增：负责人显示 -->
+                <span class="person-item"><i class="fas fa-user"></i> 负责人: <b id="pLeader">--</b></span>
+                <span class="person-item"><i class="fas fa-user-tie"></i> 项目经理: <b id="pManager">--</b></span>
+                <span class="person-item"><i class="fas fa-building"></i> 承建单位: <b id="pContractor">--</b></span>
             </div>
         </div>
-        
-        <div class="decision-metrics">
-            <!-- 状态灯 -->
-            <div class="status-light-box">
-                <div class="status-light" id="statusLight">
-                    <div class="light-glow"></div>
-                </div>
-                <span class="status-label" id="statusLabel">红色预警</span>
-            </div>
-            
-            <!-- 治理健康指数 -->
-            <div class="health-gauge-box">
-                <div id="healthGaugeTop" class="gauge-mini"></div>
-                <div class="health-score-box">
-                    <div class="score-value" id="healthScore">58</div>
-                    <div class="score-label">治理健康指数</div>
-                </div>
-            </div>
-            
-            <!-- 是否建议介入 (最醒目) -->
-            <div class="intervention-box" id="interventionBox">
-                <div class="intervention-icon">
-                    <i class="fas fa-exclamation-circle"></i>
-                </div>
-                <div class="intervention-text">
-                    <div class="intervention-label">是否建议领导介入</div>
-                    <div class="intervention-answer" id="interventionAnswer">是</div>
-                </div>
-            </div>
-            
-            <!-- 红色预警数量 -->
-            <div class="alert-count-box">
-                <div class="alert-number" id="redAlertCount">3</div>
-                <div class="alert-label">红色预警</div>
+        <div class="header-side">
+            <span class="update-time"><i class="fas fa-sync-alt"></i> 数据更新于: <span id="updateTime">--</span></span>
+            <div class="header-btns">
+                <button class="arco-btn btn-secondary"><i class="fas fa-file-alt"></i> 完整档案</button>
+                <button class="arco-btn btn-secondary"><i class="fas fa-paper-plane"></i> 发起督办</button>
             </div>
         </div>
     </div>
 
-    <!-- 2. 异常画像与介入依据 (Leadership Insight) -->
-    <div class="insight-panel">
-        <div class="insight-header">
-            <div class="insight-title">
-                <i class="fas fa-lightbulb"></i>
-                异常画像与介入依据
+    <!-- 3. 核心治理指标 -->
+    <div class="kpi-dashboard-row">
+        <!-- 治理健康度 -->
+        <div class="kpi-card">
+            <div class="chart-area-left">
+                <div id="healthGauge" class="gauge-chart"></div>
             </div>
-            <button class="btn-ghost-small" onclick="alert('查看完整分析报告')">
-                <i class="fas fa-file-alt"></i> 完整报告
-            </button>
-        </div>
-        
-        <div class="insight-content">
-            <!-- 自动异常总结 -->
-            <div class="auto-summary">
-                <div class="summary-icon">
-                    <i class="fas fa-robot"></i>
-                </div>
-                <div class="summary-text" id="autoSummary">
-                    因【阶段验收延期4天 + 存在2项高风险未关闭】，项目处于红色状态，建议领导重点关注。
-                </div>
-            </div>
-            
-            <!-- 最近关键异常 -->
-            <div class="recent-items">
-                <div class="recent-section">
-                    <h4 class="section-title">最近关键异常 (3)</h4>
-                    <ul class="exception-list" id="recentExceptions">
-                        <li class="exception-item risk">
-                            <span class="exception-tag">风险</span>
-                            <span class="exception-desc">中期阶段汇报延期4天（未关闭）</span>
-                            <span class="exception-date">2026-01-29</span>
-                        </li>
-                        <li class="exception-item quality">
-                            <span class="exception-tag">质量</span>
-                            <span class="exception-desc">核心功能开发进度滞后</span>
-                            <span class="exception-date">2026-01-28</span>
-                        </li>
-                        <li class="exception-item accountability">
-                            <span class="exception-tag">责任</span>
-                            <span class="exception-desc">督办事项超期未闭环</span>
-                            <span class="exception-date">2026-01-25</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <!-- 最近领导督办 -->
-                <div class="recent-section">
-                    <h4 class="section-title">最近领导督办 (2)</h4>
-                    <ul class="supervision-list" id="recentSupervision">
-                        <li class="supervision-item">
-                            <div class="supervision-header">
-                                <span class="supervisor">李副区长</span>
-                                <span class="supervision-date">2026-01-25</span>
-                            </div>
-                            <div class="supervision-content">
-                                请加快核心功能开发进度，确保按期完成中期汇报
-                            </div>
-                            <div class="supervision-status pending">
-                                <i class="fas fa-clock"></i> 待闭环
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+            <div class="kpi-info-center">
+                <div class="big-num-score" id="healthScoreDisplay">--</div>
+                <div class="sub-label">治理健康指数</div>
+                <div id="interventionTag" class="intervention-badge">--</div>
             </div>
         </div>
-    </div>
 
-    <!-- 3. 四大治理维度 (Four Governance Dimensions) -->
-    <div class="governance-grid">
-        
-        <!-- 维度1: 风险与安全 -->
-        <div class="governance-card risk-card">
-            <div class="card-header">
-                <div class="card-title">
-                    <i class="fas fa-shield-alt"></i>
-                    风险与安全
-                </div>
-                <span class="status-badge critical" id="riskStatus">高危</span>
-            </div>
-            
-            <div class="metrics-grid">
-                <div class="metric-item">
-                    <div class="metric-value error" id="highRiskCount">2</div>
-                    <div class="metric-label">未关闭高风险</div>
-                </div>
-                <div class="metric-item">
-                    <div class="metric-value error" id="redWarningCount">3</div>
-                    <div class="metric-label">红色预警</div>
-                </div>
-                <div class="metric-item">
-                    <div class="metric-value warning" id="overdueRiskCount">1</div>
-                    <div class="metric-label">高风险超期</div>
-                </div>
-                <div class="metric-item">
-                    <div class="metric-trend">
-                        <i class="fas fa-arrow-up trend-up"></i>
-                        <span>风险趋势上升</span>
+        <!-- 资金监管 -->
+        <div class="kpi-card">
+            <div class="card-title-sm">资金监管</div>
+            <div class="row-layout">
+                <div id="chartFund" class="circle-chart"></div>
+                <div class="kpi-text-list">
+                    <div class="item">
+                        <span class="lbl">总预算</span>
+                        <div><span class="val" id="totalFund">--</span> <span class="unit">万元</span></div>
+                    </div>
+                    <div class="item highlight-item">
+                        <span class="lbl">支付率</span>
+                        <div class="val blue-text" id="fundRate">--%</div>
                     </div>
                 </div>
             </div>
-            
-            <div class="chart-area">
-                <div id="riskTrendChart" class="mini-chart"></div>
+        </div>
+
+        <!-- 风险与合规 -->
+        <div class="kpi-card">
+            <div class="card-title-sm">风险与合规</div>
+            <div class="risk-summary-box">
+                <div class="rs-row">
+                    <span class="rs-label"><i class="fas fa-shield-alt"></i> 红色预警</span>
+                    <span class="rs-val red-text" id="redAlertCount">0</span>
+                </div>
+                <div class="rs-row">
+                    <span class="rs-label"><i class="fas fa-exclamation-triangle"></i> 待闭环高风险</span>
+                    <span class="rs-val orange-text" id="highRiskCount">0</span>
+                </div>
+                <div class="rs-row">
+                    <span class="rs-label"><i class="fas fa-clipboard-check"></i> 审计问题</span>
+                    <span class="rs-val" id="auditCount">0</span>
+                </div>
             </div>
         </div>
 
-        <!-- 维度2: 交付质量 -->
-        <div class="governance-card quality-card">
-            <div class="card-header">
-                <div class="card-title">
-                    <i class="fas fa-check-circle"></i>
-                    交付质量
+        <!-- 责任履行 -->
+        <div class="kpi-card">
+            <div class="card-title-sm">责任履行</div>
+            <div class="row-layout">
+                <div id="chartAccountability" class="circle-chart"></div>
+                <div class="kpi-text-list">
+                    <div class="item">
+                        <span class="lbl">督办未闭环</span>
+                        <span class="val red-text" id="openSupervision">0</span>
+                    </div>
+                    <div class="item">
+                        <span class="lbl">超期任务</span>
+                        <span class="val orange-text" id="overdueTask">0</span>
+                    </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. 智能异常画像 -->
+    <div class="insight-panel">
+        <div class="insight-icon-area">
+            <div class="ai-icon"><i class="fas fa-robot"></i></div>
+        </div>
+        <div class="insight-content">
+            <div class="insight-title">智能异常画像与决策建议</div>
+            <div class="insight-text" id="autoSummary">分析中...</div>
+        </div>
+        <div class="insight-action">
+            <a href="#" class="detail-link">查看分析报告 ></a>
+        </div>
+    </div>
+
+    <!-- 5. 全生命周期监管 -->
+    <div class="section-container">
+        <div class="section-header">
+            <div class="header-left">
+                <div class="title-line"></div>
+                <h3>全生命周期监管</h3>
+            </div>
+            <span class="header-hint"><i class="fas fa-mouse-pointer"></i> 点击节点查看执行清单</span>
+        </div>
+        
+        <div class="lifecycle-stepper" id="lifecycleSteps"></div>
+
+        <div class="stage-detail-wrapper" id="stageDetailPanel" style="display:none;">
+            <div class="detail-grid">
+                <div class="detail-col-left">
+                    <div class="col-header">阶段核心指标</div>
+                    <div class="metrics-grid" id="detailMetrics"></div>
+                </div>
+                <div class="detail-col-right">
+                    <div class="col-header-row">
+                        <div class="col-header">执行清单与状态</div>
+                        <button class="icon-btn-small" onclick="document.getElementById('stageDetailPanel').style.display='none'" title="关闭"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="task-list-scroll" id="detailTaskList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. 治理维度详情 -->
+    <div class="governance-details-grid">
+        <div class="gov-card quality">
+            <div class="gov-header">
+                <span class="gov-title"><i class="fas fa-check-circle"></i> 交付质量</span>
                 <span class="status-badge warning" id="qualityStatus">预警</span>
             </div>
-            
-            <div class="metrics-grid">
-                <div class="metric-item">
-                    <div class="metric-value warning" id="acceptanceRate">78%</div>
-                    <div class="metric-label">一次验收通过率</div>
-                </div>
-                <div class="metric-item">
-                    <div class="metric-value warning" id="avgRectification">2.6</div>
-                    <div class="metric-label">平均整改次数</div>
-                </div>
-                <div class="metric-item">
-                    <div class="metric-value error" id="majorQualityIssues">1</div>
-                    <div class="metric-label">重大质量问题</div>
-                </div>
-                <div class="metric-item">
-                    <div class="metric-trend">
-                        <i class="fas fa-arrow-down trend-down"></i>
-                        <span>质量趋势下降</span>
+            <div class="gov-body">
+                <div class="gov-metric-row">
+                    <div class="gm-item">
+                        <span class="gm-val" id="acceptanceRate">--%</span>
+                        <span class="gm-label">验收通过率</span>
+                    </div>
+                    <div class="gm-item">
+                        <span class="gm-val" id="majorIssues">0</span>
+                        <span class="gm-label">重大质量问题</span>
                     </div>
                 </div>
-            </div>
-            
-            <div class="chart-area">
-                <div id="qualityTrendChart" class="mini-chart"></div>
+                <div class="chart-area-mini" id="chartQualityTrend"></div>
             </div>
         </div>
 
-        <!-- 维度3: 责任与闭环 -->
-        <div class="governance-card accountability-card">
-            <div class="card-header">
-                <div class="card-title">
-                    <i class="fas fa-user-check"></i>
-                    责任与闭环
-                </div>
-                <span class="status-badge warning" id="accountabilityStatus">预警</span>
+        <div class="gov-card milestone">
+            <div class="gov-header">
+                <span class="gov-title"><i class="fas fa-flag"></i> 关键里程碑</span>
+                <a href="#" class="header-link">全部</a>
             </div>
-            
-            <div class="metrics-grid">
-                <div class="metric-item">
-                    <div class="metric-value error" id="openSupervision">2</div>
-                    <div class="metric-label">督办未闭环</div>
-                </div>
-                <div class="metric-item">
-                    <div class="metric-value warning" id="overdueTasks">4</div>
-                    <div class="metric-label">超期任务</div>
-                </div>
-                <div class="metric-item">
-                    <div class="metric-status">
-                        <i class="fas fa-times-circle status-no"></i>
-                        <span>关键责任人到位</span>
-                    </div>
-                </div>
-                <div class="metric-item">
-                    <div class="metric-status">
-                        <i class="fas fa-clock status-slow"></i>
-                        <span>响应时效: 慢</span>
-                    </div>
-                </div>
+            <div class="milestone-list-mini" id="milestoneListMini"></div>
+        </div>
+
+        <div class="gov-card compliance">
+            <div class="gov-header">
+                <span class="gov-title"><i class="fas fa-file-contract"></i> 合规证据链</span>
+                <span class="status-badge normal">正常</span>
             </div>
-            
-            <div class="responsibility-roster">
-                <div class="roster-item">
-                    <span class="role-label">业主代表:</span>
-                    <span class="role-name" id="ownerRep">王局长</span>
+            <div class="compliance-list">
+                <div class="comp-item">
+                    <span class="c-name">阶段成果齐套率</span>
+                    <span class="c-val warning-text">85%</span>
                 </div>
-                <div class="roster-item">
-                    <span class="role-label">项目经理:</span>
-                    <span class="role-name" id="projectMgr">张三</span>
+                <div class="comp-item">
+                    <span class="c-name">关键审批留痕率</span>
+                    <span class="c-val success-text">90%</span>
                 </div>
-                <div class="roster-item">
-                    <span class="role-label">承建单位:</span>
-                    <span class="role-name" id="contractor">新疆数字政务建设集团</span>
+                <div class="comp-alert">
+                    <i class="fas fa-exclamation-circle"></i> 缺失：中期验收报告
                 </div>
             </div>
         </div>
-
-        <!-- 维度4: 合规与治理 -->
-        <div class="governance-card compliance-card">
-            <div class="card-header">
-                <div class="card-title">
-                    <i class="fas fa-clipboard-check"></i>
-                    合规与治理证据
-                </div>
-                <span class="status-badge normal" id="complianceStatus">正常</span>
-            </div>
-            
-            <div class="metrics-grid">
-                <div class="metric-item">
-                    <div class="metric-value warning" id="stageDocRate">85%</div>
-                    <div class="metric-label">阶段成果齐套率</div>
-                </div>
-                <div class="metric-item">
-                    <div class="metric-value warning" id="acceptanceDocRate">78%</div>
-                    <div class="metric-label">验收资料完整率</div>
-                </div>
-                <div class="metric-item">
-                    <div class="metric-value success" id="approvalTraceRate">90%</div>
-                    <div class="metric-label">关键审批留痕率</div>
-                </div>
-                <div class="metric-item">
-                    <div class="metric-value error" id="auditIssueCount">2</div>
-                    <div class="metric-label">审计问题数</div>
-                </div>
-            </div>
-            
-            <div class="missing-docs">
-                <div class="missing-title">缺失关键材料 (1)</div>
-                <ul class="missing-list">
-                    <li><i class="fas fa-exclamation-triangle"></i> 中期验收报告</li>
-                </ul>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- 4. 阶段进展与关键里程碑 (可折叠) -->
-    <div class="collapsible-section" id="stageSection">
-        <div class="section-header" onclick="toggleSection('stageDetail')">
-            <div class="section-title">
-                <i class="fas fa-stream"></i>
-                阶段进展与关键里程碑
-            </div>
-            <button class="toggle-btn" id="stageToggle">
-                <i class="fas fa-chevron-down"></i>
-            </button>
-        </div>
-        
-        <div class="section-content" id="stageDetail">
-            <!-- 阶段时间轴 -->
-            <div class="stage-timeline" id="stageTimeline"></div>
-            
-            <!-- 关键里程碑状态 -->
-            <div class="milestone-status">
-                <h4 class="subsection-title">关键里程碑状态</h4>
-                <div class="milestone-grid" id="milestoneGrid"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 5. 操作区 (次要) -->
-    <div class="action-bar">
-        <button class="btn-secondary" onclick="alert('查看项目档案')">
-            <i class="fas fa-folder-open"></i> 项目档案
-        </button>
-        <button class="btn-secondary" onclick="alert('督办历史')">
-            <i class="fas fa-history"></i> 督办历史
-        </button>
-        <button class="btn-secondary" onclick="alert('导出审计报告')">
-            <i class="fas fa-file-export"></i> 导出报告
-        </button>
-        <button class="btn-primary" onclick="alert('发起督办')">
-            <i class="fas fa-paper-plane"></i> 发起督办
-        </button>
     </div>
 
 </div>
