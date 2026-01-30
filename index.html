@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目驾驶舱入口</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f2f5; }
+        .nav-box { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; }
+        h1 { margin-bottom: 30px; color: #333; }
+        a { display: block; margin: 15px 0; padding: 12px 24px; text-decoration: none; color: white; border-radius: 4px; font-weight: bold; }
+        .btn-owner { background-color: #1664FF; } /* 蓝色 */
+        .btn-leader { background-color: #00B42A; } /* 绿色 */
+        a:hover { opacity: 0.9; }
+    </style>
+</head>
+<body>
+    <div class="nav-box">
+        <h1>请选择进入的系统</h1>
+        <!-- 注意这里的文件路径要和你的文件夹名称一致 -->
+        <a href="/leader/index.html" class="btn-leader">进入 领导侧驾驶舱</a>
+        <a href="/L2/owner-dashboard.html" class="btn-owner">进入 业主侧驾驶舱</a>
+    </div>
+</body>
+</html>
