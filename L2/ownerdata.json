@@ -241,7 +241,7 @@
   "stages": [
     {
       "id": 1,
-      "name": "立项与决策",
+      "name": "立项阶段",
       "status": "completed",
       "start_date": "2025-08-01",
       "end_date": "2025-09-15",
@@ -261,7 +261,7 @@
     },
     {
       "id": 2,
-      "name": "启动与规划",
+      "name": "规划阶段",
       "status": "completed",
       "start_date": "2025-09-16",
       "end_date": "2025-10-31",
@@ -281,7 +281,7 @@
     },
     {
       "id": 3,
-      "name": "执行与控制",
+      "name": "实施阶段",
       "status": "current",
       "start_date": "2025-11-01",
       "end_date": null,
@@ -302,7 +302,7 @@
     },
     {
       "id": 4,
-      "name": "收尾与验收",
+      "name": "验收阶段",
       "status": "pending",
       "start_date": null,
       "end_date": null,
@@ -322,7 +322,7 @@
     },
     {
       "id": 5,
-      "name": "后评估",
+      "name": "运维阶段",
       "status": "pending",
       "start_date": null,
       "end_date": null,

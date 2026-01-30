@@ -65,7 +65,7 @@
 
   "stages": [
     {
-      "name": "立项与决策",
+      "name": "立项阶段",
       "status": "completed",
       "metrics": { "duration": "45天", "docs_count": 8, "approval_rate": "100%", "risk_count": 0 },
       "sub_tasks": [
@@ -76,7 +76,7 @@
       ]
     },
     {
-      "name": "启动与规划",
+      "name": "规划阶段",
       "status": "completed",
       "metrics": { "duration": "20天", "docs_count": 12, "budget_check": "正常", "risk_count": 1 },
       "sub_tasks": [
@@ -87,7 +87,7 @@
       ]
     },
     {
-      "name": "执行与控制",
+      "name": "实施阶段",
       "status": "current",
       "metrics": { "duration": "进行中(已延期)", "docs_count": 45, "risk_count": 6, "change_count": 3 },
       "sub_tasks": [
@@ -99,7 +99,7 @@
       ]
     },
     {
-      "name": "收尾与验收",
+      "name": "验收阶段",
       "status": "pending",
       "metrics": { "duration": "预计30天", "docs_count": 0, "bug_count": 0, "pass_rate": "--" },
       "sub_tasks": [
@@ -110,7 +110,7 @@
       ]
     },
     {
-      "name": "后评估",
+      "name": "运维阶段",
       "status": "pending",
       "metrics": { "duration": "预计15天", "satisfaction": "--", "ops_cost": "--" },
       "sub_tasks": [
