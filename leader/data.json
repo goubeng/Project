@@ -15,9 +15,9 @@
 
   "team": { 
     "leader": "王局长", 
-    "manager": "张三", 
+    "manager": "张三四", 
     "vendor": "某某数字科技",
-    "contractor": "新疆数字政务建设集团",
+    "contractor": "XXX新疆数xxxx集团",
     "collaborators": ["财政厅信息中心", "大数据局"]
   },
 

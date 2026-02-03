@@ -16,7 +16,7 @@ const mockOwnerData = {
     "update_time": "2026-01-30 14:30",
 
     "team": {
-        "leader": "王局长", // 新增负责人数据
+        "leader": "王局长", 
         "manager": "张三",
         "contractor": "新疆数字政务建设集团"
     },
@@ -29,17 +29,17 @@ const mockOwnerData = {
 
     "stages": [
         {
-          "name": "立项与决策", "status": "completed",
+          "name": "立项阶段", "status": "completed",
           "metrics": { "duration": "45天", "docs_count": 8, "approval_rate": "100%", "risk_count": 0 },
           "sub_tasks": [ {"name": "项目建议书申报", "status": "done"}, {"name": "财政资金批复", "status": "done"} ]
         },
         {
-          "name": "启动与规划", "status": "completed",
+          "name": "规划阶段", "status": "completed",
           "metrics": { "duration": "20天", "docs_count": 12, "budget_check": "正常", "risk_count": 1 },
           "sub_tasks": [ {"name": "招投标完成", "status": "done"}, {"name": "合同签订", "status": "done"} ]
         },
         {
-          "name": "执行与控制", "status": "current",
+          "name": "实施阶段", "status": "current",
           "metrics": { "duration": "已延期", "docs_count": 45, "risk_count": 6, "change_count": 3 },
           "sub_tasks": [
             {"name": "需求分析确认", "status": "done"},
@@ -50,12 +50,12 @@ const mockOwnerData = {
           ]
         },
         {
-          "name": "收尾与验收", "status": "pending",
+          "name": "验收阶段", "status": "pending",
           "metrics": { "duration": "预计30天", "docs_count": 0, "bug_count": 0, "pass_rate": "--" },
           "sub_tasks": [ {"name": "系统上线试运行", "status": "pending"}, {"name": "初步验收会", "status": "pending"} ]
         },
         {
-          "name": "后评估", "status": "pending",
+          "name": "运维阶段", "status": "pending",
           "metrics": { "duration": "预计15天", "satisfaction": "--", "ops_cost": "--" },
           "sub_tasks": [ {"name": "运维团队移交", "status": "pending"}, {"name": "档案归档", "status": "pending"} ]
         }
